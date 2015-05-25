@@ -53,5 +53,6 @@ public class Main {
         l=(l/60000);
         String s=(a.format(l));
         System.out.println("Scan complete,spent "+s+" minute.");
+        //test vcs
    }
 }
