@@ -14,8 +14,8 @@ import java.util.concurrent.*;
  *
  */
 public class IpScanner {
-    private int corePoolSize=50;
-    private int maximumPoolSize=100;
+    private int corePoolSize=150;
+    private int maximumPoolSize=300;
     private long keepAliveTime=5000;
     private BlockingDeque<Runnable> workQueue=new LinkedBlockingDeque<Runnable>();
     private ExecutorService threadPoolExecutor=new ThreadPoolExecutor(corePoolSize,maximumPoolSize,keepAliveTime,
@@ -204,9 +204,9 @@ public class IpScanner {
         try
         { 	String sqlstr = "";
             switch (adlevel){
-                case quting:sqlstr="select ipstart,ipend,areacode from ipsegment where areacode like \"%00000000\" order by ipstart";
+                case quting:sqlstr="select ipstart,ipend,areacode from ipsegment where flag=1 and areacode like \"%00000000\" order by ipstart";
                     break;
-                case dishi:sqlstr="select ipstart,ipend,areacode from ipsegment where areacode not like \"%00000000\" order by ipstart";
+                case dishi:sqlstr="select ipstart,ipend,areacode from ipsegment where flag=1 and areacode not like \"%00000000\" order by ipstart";
                     break;
                 default:System.out.println("获取IP地址函数参数错误。");
             }

@@ -25,8 +25,8 @@ public class IpScanWorker implements Runnable{
             if(inetAddress.isReachable(5000)) { // wait 5 seconds
                 String ip = inetAddress.getHostAddress();
                 String hostname = inetAddress.getHostName();
-                String mac = GetMacAddress.getMacAddress(ipStr);
-                // String mac=GetMacAddress.getMacInLinux(ipStr).trim();
+                //String mac = GetMacAddress.getMacAddress(ipStr);
+                String mac=GetMacAddress.getMacInLinux(ipStr).trim();
                 System.out.println("DiscoverIp:HostName:" + hostname + ",Ip:" + ip + ",Mac:" + mac);
                 InsertDiscoverIp(ip, hostname, mac, areacode);
             }
@@ -47,7 +47,7 @@ public class IpScanWorker implements Runnable{
                     +",discoverylasttime=\'"+ Timestamp.valueOf(disctime.format(new Date()))
                     +"\' WHERE ip=\'"+ip+"\'";
             if (rs.next()){
-                if (areacode.substring(4)=="00000000"){
+                if (areacode.substring(4).equals("00000000")){
                     str="UPDATE ipdiscovery SET discoverylasttime=\'"
                             +Timestamp.valueOf(disctime.format(new Date()))+"\' WHERE ip=\'"+ip+"\'";}
                 System.out.println("ip exist,update:"+ip+"was found discoverylasttime.");

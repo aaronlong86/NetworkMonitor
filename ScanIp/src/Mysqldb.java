@@ -33,7 +33,7 @@ public class Mysqldb {
 			e.printStackTrace();
 		}
 	}
-	//获取已发现的所有IP
+	//获取某(单位)已发现的所有IP
 	public ArrayList<String> getDiscoveryIp(String areacode) {
 		ArrayList<String> iplist=new ArrayList<String>();
 		Mysqldb mdb = new Mysqldb();
@@ -58,11 +58,11 @@ public class Mysqldb {
 		}
 		return iplist;
 	}
-	//获取某(单位)的所有IP段
+	//获取所有IP段
 	public ArrayList<String> getIpSegment() {
 		ArrayList<String> ipseg=new ArrayList<String>();
 		try
-		{ 	ResultSet rs = sql.executeQuery("select ipstart,ipend,areacode from ipsegment order by areacode");
+		{ 	ResultSet rs = sql.executeQuery("select ipstart,ipend,areacode from ipsegment where flag=1 order by areacode");
 			while (rs.next())
 			{
 				ipseg.add(rs.getString("ipstart"));
