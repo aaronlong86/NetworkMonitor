@@ -34,10 +34,12 @@ public class IpSegmentServlet
         String ipstart = request.getParameter("ipstart");
         String ipend = request.getParameter("ipend");
         String level = request.getParameter("level");
+        String flag = request.getParameter("flag");
         HttpSession session = request.getSession();
         String username = (String)session.getAttribute("username");
         if ((areacode != null) || (area != null) || (ipstart != null) || (ipend != null) || (level != null)) {
-            addipsegment(area, areacode, ipstart, ipend, level, username);
+            if (flag.equals("add")){addipsegment(area, areacode, ipstart, ipend, level, username);}
+            if (flag.equals("delete")){deleteipsegment(area,areacode,ipstart,ipend,level,username);}
         }
         ArrayList<IpSegmentBean> ipsegList = getIpSegment();
         request.setAttribute("ipsegList", ipsegList);
@@ -50,7 +52,7 @@ public class IpSegmentServlet
         Mysqldb mdb = new Mysqldb();
         try
         {
-            String sqlstr = "select * from ipsegment order by areacode,ipstart";
+            String sqlstr = "select * from ipsegment where flag=1 order by areacode,ipstart";
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;
             while (rs.next())
@@ -90,6 +92,33 @@ public class IpSegmentServlet
             SimpleDateFormat disctime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String sqlstr = "insert into ipsegment (area,areacode,ipstart,ipend,level,recorder,recordtime) VALUES('" + area + "','" + areacode + "','" + ipstart + "','" + ipend + "'," + level + ",'" + username + "','" + Timestamp.valueOf(disctime.format(new Date())) + "')";
 
+            mdb.sql.executeUpdate(sqlstr);
+            mdb.close();
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Error : " + ex.toString());
+            mdb.close();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean deleteipsegment(String area, String areacode, String ipstart, String ipend, String level, String username)
+    {
+        if ((!validate(ipstart)) || (!validate(ipend)))
+        {
+            System.err.println("不是有效的IP地址。" + ipstart);
+            return false;
+        }
+        Mysqldb mdb = new Mysqldb();
+        try
+        {
+            SimpleDateFormat disctime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String sqlstr = "update ipsegment set flag=0,recordtime=\'"+
+                    Timestamp.valueOf(disctime.format(new Date()))+
+                    "\',recorder=\'"+username+"\' where areacode=\'"+
+                    areacode+"\' and ipstart=\'"+ipstart+"\' and ipend=\'"+ipend+"\' and level ="+level;
             mdb.sql.executeUpdate(sqlstr);
             mdb.close();
         }

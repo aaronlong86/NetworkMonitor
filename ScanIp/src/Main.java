@@ -45,8 +45,10 @@ public class Main {
       //  ipScanner1.scan("172.52.0.0","172.52.255.255");
         //扫描已发现IP的常用端口
         Date date1=new Date();
-        PortScanner portScanner = new PortScanner();
-        portScanner.scancommonport();
+       // PortScanner portScanner = new PortScanner();
+       // portScanner.scancommonport();
+          IpScanner ipScanner1 = new IpScanner();
+          ipScanner1.scan("45.20.0.1","45.23.255.255");
         Date date2=new Date();
         long l=date2.getTime()-date1.getTime();
         DecimalFormat a = new DecimalFormat("0.0");

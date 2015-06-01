@@ -8,6 +8,7 @@ public class IpSegmentBean
     private String ipend;
     private String areacode;
     private int level;
+    private int flag;
 
     public int getId()
     {
@@ -68,4 +69,7 @@ public class IpSegmentBean
     {
         this.level = level;
     }
+
+    public int getFlag(){return flag;}
+    public void setFlag(int flag){this.flag=flag;}
 }
