@@ -66,7 +66,11 @@ public class TongJiServlet
             int i = 1;
             for (Iterator i$ = completetable.iterator(); i$.hasNext(); i++)
             {
-                TongJiBean tongJiBean = (TongJiBean)i$.next();tongJiBean.setRanking(i);
+                TongJiBean tongJiBean = (TongJiBean)i$.next();
+                String s=tongJiBean.getArea().replace("广西","");
+                s=s.replace("市公安局","");
+                tongJiBean.setArea(s);
+                tongJiBean.setRanking(i);
             }
             rs.close();
             mdb.close();

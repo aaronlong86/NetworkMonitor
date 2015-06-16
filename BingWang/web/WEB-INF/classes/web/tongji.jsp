@@ -17,8 +17,8 @@
               <tr>                  
                   <th>排名</th>
                   <th>单位</th>
-                  <th>并网任务数</th>                
-                  <th><a href="/bingwang/ip?area45=广西公安厅" target="_blank">已并网数</a></th>                
+                  <th style="width:50px">并网任务数</th>                
+                  <th style="width:50px"><a href="/bingwang/ip?area45=广西公安厅" target="_blank">已并网数</a></th>                
                   <th>完成率</th>                
                   <th>进度</th>                
               </tr>

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Administrator on 2015/5/8 0008.
@@ -81,6 +82,13 @@ public class OnlineServlet extends HttpServlet {
                     }
                 }
                 }
+            for (Iterator i$ = onLineBeanList.iterator(); i$.hasNext();)
+            {
+                OnLineBean onLineBean = (OnLineBean)i$.next();
+                String s=onLineBean.getArea().replace("广西","");
+                s=s.replace("市公安局","");
+                onLineBean.setArea(s);
+            }
             rs.close();
             mdb.close();
         }
