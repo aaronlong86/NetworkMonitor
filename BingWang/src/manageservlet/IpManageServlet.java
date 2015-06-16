@@ -114,7 +114,8 @@ public class IpManageServlet
         Mysqldb mdb = new Mysqldb();
         try
         {
-            String sqlstr = "SELECT * from ipsegment where (areacode like '" + areacode.substring(0, 6) + "%')";
+            String sqlstr = "SELECT * from ipsegment where (flag=1) and (areacode like '"
+                    + areacode.substring(0, 6) + "%') order by ipstart,areacode";
 
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;

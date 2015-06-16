@@ -109,7 +109,9 @@ public class PortServlet
         Mysqldb mdb = new Mysqldb();
         try
         {
-            String sqlstr = "select t2.area,t1.ipstart,t1.ipend,t1.areacode from (SELECT SUBSTRING(t4.areacode,1,6) as xiancode from organization t4 where area='" + area + "') t3,ipsegment t1,organization t2 where (t1.areacode=t2.areacode)" + " and (SUBSTRING(t2.areacode,1,6)=t3.xiancode) order by t1.areacode,t1.ipstart";
+            String sqlstr = "select t2.area,t1.ipstart,t1.ipend,t1.areacode from (SELECT SUBSTRING(t4.areacode,1,6) as xiancode from organization t4 where area='"
+                    + area + "') t3,ipsegment t1,organization t2 where (t1.areacode=t2.areacode)"
+                    + " and (t1.flag=1) and (SUBSTRING(t2.areacode,1,6)=t3.xiancode) order by t1.ipstart,t1.areacode";
 
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;
