@@ -10,9 +10,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
 <b>广西公安视频专网并网进度情况统计</b>
-<body>
         <table border="1">
               <tr>                  
                   <th>排名</th>
@@ -33,5 +31,3 @@
     </tr>
   </c:forEach>
           </table>
-</body>
-</html>

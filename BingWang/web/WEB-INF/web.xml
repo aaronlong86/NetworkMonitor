@@ -56,6 +56,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>offlineServlet</servlet-name>
+        <servlet-class>showservlet.OfflineServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>offlineServlet</servlet-name>
+        <url-pattern>/offline</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>donlineServlet</servlet-name>
         <servlet-class>showservlet.DOnlineServlet</servlet-class>
     </servlet>

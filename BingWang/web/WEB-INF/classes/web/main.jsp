@@ -96,16 +96,20 @@
         </c:forEach>
       </table>
     </div>
-    <div id="sidebar2">This is the sidebar2</div>
+    <div id="sidebar2">
+        <iframe src= "/bingwang/offline"   width= "100% " height= "100% " scroll= "auto "
+                frameborder= "1 " name= "content " style="position:absolute;">
+        </iframe>
+    </div>
       <div id="content">
           <div id="content1">
-              <iframe src= "/bingwang/tongji"   width= "100% " height= "100% " scroll= "auto "
-                      frameborder= "1 " name= "content " style="position:absolute;">
+              <iframe src= "/bingwang/tongji" width= "100% " height= "100% " scroll= "auto "
+                      frameborder= "0" name= "content " style="position:absolute;">
               </iframe>
           </div>
           <div id="content2">
               <iframe src= "/bingwang/online"   width= "100% " height= "100% " scroll= "auto "
-                      frameborder= "1 " name= "content " style="position:absolute;">
+                      frameborder= "1" name= "content " style="position:absolute;">
               </iframe>
       </div>
     </div>
