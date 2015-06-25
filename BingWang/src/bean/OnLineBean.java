@@ -3,6 +3,7 @@ package bean;
 public class OnLineBean
 {
     private String area;
+    private String areacode;
     private int totalnum;
     private int onlinenum;
     private float onlinerate;
@@ -15,6 +16,16 @@ public class OnLineBean
     public void setArea(String area)
     {
         this.area = area;
+    }
+
+    public String getAreacode()
+    {
+        return this.areacode;
+    }
+
+    public void setAreacode(String areacode)
+    {
+        this.areacode = areacode;
     }
 
     public int getTotalnum()

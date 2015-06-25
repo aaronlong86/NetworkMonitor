@@ -16,7 +16,7 @@
                   <th>排名</th>
                   <th>单位</th>
                   <th style="width:50px">并网任务数</th>                
-                  <th style="width:50px"><a href="/bingwang/ip?area45=广西公安厅" target="_blank">已并网数</a></th>                
+                  <th style="width:50px"><a href="/bingwang/ip?areacode45=450000000000" target="_blank">已并网数</a></th>                
                   <th>完成率</th>                
                   <th>进度</th>                
               </tr>
@@ -25,7 +25,7 @@
       <td><c:out value="${tj.ranking}"></c:out></td>
       <td><c:out value="${tj.area}"></c:out></td>
       <td><c:out value="${tj.tasknum}"></c:out></td>
-      <td><a href="/bingwang/ip?area45=${tj.area}" target="_blank"><c:out value="${tj.ipnum}"></a></c:out></td>
+      <td><a href="/bingwang/ip?areacode45=${tj.areacode}" target="_blank"><c:out value="${tj.ipnum}"></a></c:out></td>
       <td><fmt:formatNumber type="percent" value="${tj.taskrate}" /></td>
       <td><progress value="${tj.taskrate}" max="1"> </progress></td>
     </tr>

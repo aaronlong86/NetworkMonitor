@@ -34,7 +34,7 @@ public class TongJiServlet
 
     private ArrayList<TongJiBean> gettongji(int ipseg)
     {
-        String str1 = "select t1.area,t2.tasknum from organization t1,tasknumber t2 where (t1.areacode like '%00000000') and (t1.areacode not LIKE '%0000000000') and (t1.areacode=t2.areacode) and (t2.level=1)";
+        String str1 = "select t1.area,t1.areacode,t2.tasknum from organization t1,tasknumber t2 where (t1.areacode like '%00000000') and (t1.areacode not LIKE '%0000000000') and (t1.areacode=t2.areacode) and (t2.level=1)";
 
         String str2 = "SELECT COUNT(*),t2.area,t2.dishicode FROM (SELECT t1.area, SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1 WHERE t1.areacode LIKE '%00000000' AND t1.areacode NOT LIKE '%0000000000') t2, ipdiscovery t3 WHERE (SUBSTRING(t3.areacode,1,4) = t2.dishicode) AND (t3.ip LIKE \"" + Integer.toString(ipseg) + "%\")" + " GROUP BY t2.dishicode";
 
@@ -47,6 +47,7 @@ public class TongJiServlet
             {
                 TongJiBean tongJiBean = new TongJiBean();
                 tongJiBean.setArea(rs.getString("t1.area"));
+                tongJiBean.setAreacode(rs.getString("t1.areacode"));
                 tongJiBean.setIpnum(0);
                 tongJiBean.setTasknum(rs.getInt("t2.tasknum"));
                 tongJiBean.setTaskrate(0);

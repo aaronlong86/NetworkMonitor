@@ -34,12 +34,13 @@ public class OnlineServlet extends HttpServlet {
         Mysqldb mdb = new Mysqldb();
         try
         {
-            String str ="select area from organization where (areacode like '%00000000') and (areacode not LIKE '%0000000000') order by areacode";
+            String str ="select area,areacode from organization where (areacode like '%00000000') and (areacode not LIKE '%0000000000') order by areacode";
             ResultSet rs = mdb.sql.executeQuery(str);
             while (rs.next())
             {
                 OnLineBean onLineBean=new OnLineBean();
                 onLineBean.setArea(rs.getString("area"));
+                onLineBean.setAreacode(rs.getString("areacode"));
                 onLineBean.setTotalnum(0);
                 onLineBean.setOnlinenum(0);
                 onLineBean.setOnlinerate(0);

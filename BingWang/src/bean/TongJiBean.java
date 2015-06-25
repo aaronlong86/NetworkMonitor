@@ -3,6 +3,7 @@ package bean;
 public class TongJiBean
 {
     private String area;
+    private String areacode;
     private int ipnum;
     private int tasknum;
     private float taskrate;
@@ -17,6 +18,9 @@ public class TongJiBean
     {
         this.area = area;
     }
+
+    public String getAreacode(){return areacode;}
+    public void setAreacode(String areacode){this.areacode=areacode;}
 
     public int getIpnum()
     {
