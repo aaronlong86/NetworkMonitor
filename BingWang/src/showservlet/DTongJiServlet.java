@@ -1,5 +1,6 @@
 package showservlet;
 
+import bean.OnLineBean;
 import bean.TongJiBean;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -14,6 +15,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import sys.Init;
 import sys.Mysqldb;
 
 @WebServlet(name="DTongJiServlet")
@@ -30,12 +33,14 @@ public class DTongJiServlet
         String area = request.getParameter("area");
         ArrayList<TongJiBean> tjList = gettongji(area);
         request.setAttribute("tjList", tjList);
+        ArrayList<OnLineBean> onLineBeanList = dgetonline(area);
+        request.setAttribute("onLineBeanList", onLineBeanList);
         request.getRequestDispatcher("tongji.jsp").forward(request, response);
     }
 
     private ArrayList<TongJiBean> gettongji(String area)
     {
-        String str1 = "SELECT t4.area,t5.tasknum FROM (SELECT  SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1 WHERE t1.area='" + area + "')" + " t2,organization t4,tasknumber t5 WHERE (SUBSTRING(t4.areacode,1,4) = t2.dishicode)" + " and (t5.areacode=t4.areacode) and (t5.level=2) and (t4.areacode LIKE '%000000')";
+        String str1 = "SELECT t4.area,t4.areacode,t5.tasknum FROM (SELECT  SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1 WHERE t1.area='" + area + "')" + " t2,organization t4,tasknumber t5 WHERE (SUBSTRING(t4.areacode,1,4) = t2.dishicode)" + " and (t5.areacode=t4.areacode) and (t5.level=2) and (t4.areacode LIKE '%000000')";
 
         String str2 = "SELECT COUNT(*),t4.area,SUBSTRING(t4.areacode, 1, 6) AS xiancode FROM (SELECT  SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1 WHERE t1.area='" + area + "')" + " t2, ipdiscovery t3,organization t4 WHERE (SUBSTRING(t3.areacode,1,4) = " + "t2.dishicode)  and (t4.areacode=t3.areacode) and (t3.areacode LIKE '%000000')" + "and (t3.ip like \"45%\") GROUP BY xiancode";
 
@@ -48,6 +53,7 @@ public class DTongJiServlet
             {
                 TongJiBean tongJiBean = new TongJiBean();
                 tongJiBean.setArea(rs.getString("t4.area"));
+                tongJiBean.setAreacode(rs.getString("t4.areacode"));
                 tongJiBean.setIpnum(0);
                 tongJiBean.setTasknum(rs.getInt("t5.tasknum"));
                 tongJiBean.setTaskrate(0);
@@ -67,7 +73,14 @@ public class DTongJiServlet
             int i = 1;
             for (Iterator i$ = completetable.iterator(); i$.hasNext(); i++)
             {
-                TongJiBean tongJiBean = (TongJiBean)i$.next();tongJiBean.setRanking(i);
+                TongJiBean tongJiBean = (TongJiBean)i$.next();
+                tongJiBean.setRanking(i);
+                String s=tongJiBean.getArea().replace("广西","");
+                s=s.replace("市公安局","");
+                s=s.replace("分局","");
+                s=s.replace("公安局","");
+                s=s.replace("壮族自治区","");
+                tongJiBean.setArea(s);
             }
             rs.close();
             mdb.close();
@@ -79,5 +92,87 @@ public class DTongJiServlet
             return completetable;
         }
         return completetable;
+    }
+
+    private ArrayList<OnLineBean> dgetonline(String area){
+        ArrayList<OnLineBean> onLineBeanList=new ArrayList<OnLineBean>();
+        Mysqldb mdb = new Mysqldb();
+        try
+        {
+            String str ="SELECT t4.area,t4.areacode FROM (SELECT "+
+                    " SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1"+
+                    " WHERE t1.area=\'"+area+"\')"
+                    +" t2,organization t4 WHERE (SUBSTRING(t4.areacode,1,4) = t2.dishicode)"
+                    +" and (t4.areacode LIKE '%000000')";
+            ResultSet rs = mdb.sql.executeQuery(str);
+            while (rs.next())
+            {
+                OnLineBean onLineBean=new OnLineBean();
+                onLineBean.setArea(rs.getString("t4.area"));
+                onLineBean.setAreacode(rs.getString("t4.areacode"));
+                onLineBean.setTotalnum(0);
+                onLineBean.setOnlinenum(0);
+                onLineBean.setOnlinerate(0);
+                onLineBeanList.add(onLineBean);
+            }
+
+            str="SELECT COUNT(*),t4.area,SUBSTRING(t4.areacode, 1, 6) AS xiancode FROM (SELECT "+
+                    " SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1"+
+                    " WHERE t1.area=\'"+area+"\')"
+                    +" t2, ipdiscovery t3,organization t4 WHERE (SUBSTRING(t3.areacode,1,4) = t2.dishicode)"
+                    +" and (t4.areacode=t3.areacode)"+
+                    " and (t3.areacode LIKE '%000000') GROUP BY xiancode ORDER BY xiancode";
+            rs = mdb.sql.executeQuery(str);
+            while (rs.next())
+            {
+                for (int i=0;i<onLineBeanList.size();i++) {
+                    if (rs.getString("t4.area").equals(onLineBeanList.get(i).getArea()))
+                    {
+                        onLineBeanList.get(i).setTotalnum(Integer.valueOf(rs.getString("COUNT(*)")));
+                    }
+                }
+            }
+            str="SELECT COUNT(*),t4.area,SUBSTRING(t4.areacode, 1, 6) AS xiancode FROM (SELECT "+
+                    " SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1"+
+                    " WHERE t1.area=\'"+area+"\')"
+                    +" t2, ipdiscovery t3,organization t4 WHERE (SUBSTRING(t3.areacode,1,4) = t2.dishicode)"+
+                    " and (t4.areacode=t3.areacode)"+
+                    " and (t3.areacode LIKE '%000000') AND (t3.areacode NOT LIKE '%00000000')"
+                    +"and ((TIMESTAMPDIFF(MINUTE,t3.discoverylasttime,now()))<="
+                    +Integer.toString(Init.scanIpinterval)+") GROUP BY xiancode ORDER BY xiancode";
+
+            rs = mdb.sql.executeQuery(str);
+            while (rs.next())
+            {  for (int i=0;i<onLineBeanList.size();i++) {
+                if (onLineBeanList.get(i).getArea().equals(rs.getString("t4.area")))
+                {
+                    int t1=onLineBeanList.get(i).getTotalnum();
+                    int t2=(Integer.valueOf(rs.getString("COUNT(*)")));
+                    onLineBeanList.get(i).setOnlinenum(t2);
+                    if (t1>0) {float d=(float)(t2)/(float)(t1);
+                        onLineBeanList.get(i).setOnlinerate(d);}
+                }
+            }
+            }
+
+            for(OnLineBean onLineBean:onLineBeanList)
+            {
+                String s=onLineBean.getArea().replace("广西", "");
+                s=s.replace("市公安局","");
+                s=s.replace("分局","");
+                s=s.replace("公安局","");
+                s=s.replace("壮族自治区","");
+                onLineBean.setArea(s);
+            }
+            rs.close();
+            mdb.close();
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Error : " + ex.toString());
+            mdb.close();
+            return onLineBeanList;
+        }
+        return onLineBeanList;
     }
 }

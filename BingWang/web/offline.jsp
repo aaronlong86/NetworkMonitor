@@ -19,12 +19,14 @@ h2{text-align:center;font-weight: 900;font-size: 100%;background-color:red;color
   <tr>
   <th>单位</th>
   <th style="width:50px">网络设备</th>
+  <th style="width:50px">品牌</th>
   <th>状态</th>                           
   </tr>
   <c:forEach items="${network}" var="nw">
     <tr>
       <td><c:out value="${nw.area}"></c:out></td>
       <td><c:out value="${nw.ip}"></c:out></td>
+      <td><c:out value="${nw.brand}"></c:out></td>
       <td><h2>&#935;</h2></td>
     </tr>
   </c:forEach>
@@ -35,12 +37,14 @@ h2{text-align:center;font-weight: 900;font-size: 100%;background-color:red;color
   <tr>
     <th>单位</th>
     <th style="width:50px">视频联网平台</th>
+    <th style="width:50px">品牌</th>
     <th>状态</th>                           
   </tr>
   <c:forEach items="${platform}" var="pf">
     <tr>
       <td><c:out value="${pf.area}"></c:out></td>
       <td><c:out value="${pf.ip}"></c:out></td>
+      <td><c:out value="${pf.brand}"></c:out></td>
       <td><h2>&#935;</h2></td>
     </tr>
   </c:forEach>

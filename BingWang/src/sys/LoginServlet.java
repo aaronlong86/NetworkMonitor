@@ -25,7 +25,7 @@ public class LoginServlet
         if ((username == "") || (username == null) || (username.length() > 20)) {
             try
             {
-                result = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½20ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)!";
+                result = "ÓÃ»§Ãû²»ÕıÈ·£¨ÓÃ»§ÃûÎª¿Õ»ò³¤¶È´óÓÚ20£©!";
                 request.setAttribute("message", result);
                 response.sendRedirect("login.jsp");
             }
@@ -37,7 +37,7 @@ public class LoginServlet
         if ((password == "") || (password == null) || (password.length() > 20)) {
             try
             {
-                result = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½20ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)!";
+                result = "ÃÜÂë²»ÕıÈ·£¨ÃÜÂëÎª¿Õ»ò³¤¶È´óÓÚ20£©!";
                 request.setAttribute("message", result);
                 response.sendRedirect("login.jsp");
             }
@@ -63,7 +63,7 @@ public class LoginServlet
             }
             else
             {
-                session.setAttribute("message", "ç”¨æˆ·åæˆ–å¯†ç ä¸åŒ¹é…ï¼");
+                session.setAttribute("message", "ÓÃ»§Ãû»òÃÜÂë²»Æ¥Åä£¡");
                 response.sendRedirect("/bingwang/login.jsp");
             }
             rs.close();

@@ -23,7 +23,7 @@
 <table border="1">
               <tr>                  
                   <th>单位</th>
-                  <th><a href="/bingwang/ip?area=广西公安厅" target="_blank">设备总数(区厅)</a></th>
+                  <th><a href="/bingwang/ip?areacode=450000000000" target="_blank">设备总数(区厅)</a></th>
                   <th>在线数</th>
   <th>在线率</th>
   <th>状态</th>                
@@ -37,7 +37,7 @@
           <h4>--</h4>
         </c:when>
         <c:otherwise>
-        <a href="/bingwang/ip?area=${oll.area}" target="_blank">
+        <a href="/bingwang/ip?areacode=${oll.areacode}" target="_blank">
           <c:out value="${oll.totalnum}"></c:out></a>
         </c:otherwise>
         </c:choose>
@@ -59,7 +59,7 @@
             <h4>--</h4>
           </c:when>
           <c:otherwise>
-            <a href="/bingwang/ip?area=${oll.area}&onlinerate=${oll.onlinerate}" target="_blank">
+            <a href="/bingwang/ip?areacode=${oll.areacode}&onlinerate=${oll.onlinerate}" target="_blank">
               <fmt:formatNumber type="percent" value="${oll.onlinerate}" />
             </a>
           </c:otherwise>

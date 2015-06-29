@@ -34,7 +34,7 @@ public class OfflineServlet extends HttpServlet {
         Mysqldb mdb = new Mysqldb();
         try
         {
-            String sqlstr = "SELECT t1.ip,t2.area,t1.areacode FROM ipdiscovery t1,organization t2 WHERE (t1.devicetype = '交换机') and ((TIMESTAMPDIFF(MINUTE,t1.discoverylasttime,now()))>"
+            String sqlstr = "SELECT t1.ip,t2.area,t1.brand,t1.areacode FROM ipdiscovery t1,organization t2 WHERE (t1.devicetype = '交换机') and ((TIMESTAMPDIFF(MINUTE,t1.discoverylasttime,now()))>"
                     +Integer.toString(Init.scanIpinterval)+") and (t1.areacode=t2.areacode) order by t1.areacode";
 
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
@@ -42,8 +42,15 @@ public class OfflineServlet extends HttpServlet {
             {
                 IpBean ipBean = new IpBean();
                 ipBean.setIp(rs.getString("t1.ip"));
+                ipBean.setBrand(rs.getString("t1.brand"));
                 ipBean.setArea(rs.getString("t2.area"));
                 ipBean.setStatus("offline");
+                String s=ipBean.getArea().replace("广西", "");
+                s=s.replace("市公安局","");
+                s=s.replace("分局","");
+                s=s.replace("公安局","");
+                s=s.replace("壮族自治区","");
+                ipBean.setArea(s);
                 ipBeans.add(ipBean);
             }
             rs.close();
@@ -63,7 +70,7 @@ public class OfflineServlet extends HttpServlet {
         Mysqldb mdb = new Mysqldb();
         try
         {
-            String sqlstr = "SELECT t1.ip,t2.area,t1.areacode FROM ipdiscovery t1,organization t2 WHERE (t1.devicetype = '视频联网平台') and ((TIMESTAMPDIFF(MINUTE,t1.discoverylasttime,now()))>"
+            String sqlstr = "SELECT t1.ip,t2.area,t1.brand,t1.areacode FROM ipdiscovery t1,organization t2 WHERE (t1.devicetype = '视频联网平台') and ((TIMESTAMPDIFF(MINUTE,t1.discoverylasttime,now()))>"
                     +Integer.toString(Init.scanIpinterval)+") and (t1.areacode=t2.areacode) order by t1.areacode";
 
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
@@ -71,8 +78,15 @@ public class OfflineServlet extends HttpServlet {
             {
                 IpBean ipBean = new IpBean();
                 ipBean.setIp(rs.getString("t1.ip"));
+                ipBean.setBrand(rs.getString("t1.brand"));
                 ipBean.setArea(rs.getString("t2.area"));
                 ipBean.setStatus("offline");
+                String s=ipBean.getArea().replace("广西", "");
+                s=s.replace("市公安局","");
+                s=s.replace("分局","");
+                s=s.replace("公安局","");
+                s=s.replace("壮族自治区","");
+                ipBean.setArea(s);
                 ipBeans.add(ipBean);
             }
             rs.close();

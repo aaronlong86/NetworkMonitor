@@ -31,18 +31,20 @@ public class Main {
       //统计各市进度
      //   Statistics statistics=new Statistics();
      //   statistics.dishi();*/
-         while(true) {
-            IpScanner ipScanner1 = new IpScanner();
+     //    while(true) {
+     //       IpScanner ipScanner1 = new IpScanner();
             //扫描地市已分配的IP
-              ipScanner1.scandishidiv();
+     //         ipScanner1.scandishidiv();
             //扫描已发现IP的常用端口
             //PortScanner portScanner = new PortScanner();
             //portScanner.scancommonport();
             //扫描区厅已分配的IP
              // ipScanner1.scanqutingdiv();
-        }
-      //  IpScanner ipScanner1 = new IpScanner();
-      //  ipScanner1.scan("172.52.0.0","172.52.255.255");
+      //  }
+        IpScanner ipScanner1 = new IpScanner();
+        String ipstart=args[0];
+        String ipend=args[1];
+        ipScanner1.scan(ipstart,ipend);
         //扫描已发现IP的常用端口
        // PortScanner portScanner = new PortScanner();
        // portScanner.scancommonport();

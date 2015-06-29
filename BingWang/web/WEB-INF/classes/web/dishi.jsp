@@ -15,10 +15,10 @@
     #header { height:80px;line-height: 80px; background:#9c6; margin-bottom:3px;text-align:center;}
     #menu1 {font-weight: bold;font-size:20px;height:30px; background:#693; margin-bottom:3px;}
     #menu2 {font-weight: bold;font-size:20px;height:30px; background:#693; margin-bottom:3px;}
-    #mainContent { height:930px; margin-bottom:3px;vertical-align:top;}
-    #sidebar {font-size:20px;float:left; width:200px; height:930px;border: solid;vertical-align:top; background:#cf9;}
-    #content1 { margin-left:205px !important; margin-left:202px;position:relative;border: solid;vertical-align:top; height:430px; background:#ffa;}/*当content设定高度后，3像素会跑到content外侧，这样，我们用!important修正在ie下向左多浮动2像素，加上3像素的bug正好是5像素，所以在火狐和IE下显示是一样的*/
-    #content2 { margin-left:205px !important; margin-left:202px;position:relative;border: solid;vertical-align:top; height:495px; background:#ffa;}
+    #mainContent { height:1200px; margin-bottom:3px;position:relative;vertical-align:top;}
+    #sidebar {font-size:20px; float:left; width:200px; height:1200px;border: solid;vertical-align:top; background:#cf9;}
+    #sidebar2 {float:right; width:450px; height:1200px; background:#cf9;}
+    #content {margin:0 455px 0 205px !important; margin:0 452px 0 202px;border: solid;vertical-align:top; height:1200px; background:#ffa;}
     #footer { height:60px;padding: 60px; background:#9c6;text-align:center;vertical-align:bottom;}
   </style>
 </head>
@@ -93,13 +93,13 @@
         </c:forEach>
       </table>
     </div>
-    <div id="content1">
-      <iframe src= "/bingwang/dtongji?area=<%=s%>"   width= "100% " height= "100% " scroll= "auto "
+    <div id="sidebar2">
+      <iframe src= "/bingwang/offline"   width= "100% " height= "100% " scroll= "auto "
               frameborder= "1 " name= "content " style="position:absolute;">
       </iframe>
     </div>
-    <div id="content2">
-      <iframe src= "/bingwang/donline?area=<%=s%>"   width= "100% " height= "100% " scroll= "auto "
+    <div id="content">
+      <iframe src= "/bingwang/dtongji?area=<%=s%>"   width= "100% " height= "100% " scroll= "auto "
               frameborder= "1 " name= "content " style="position:absolute;">
       </iframe>
     </div>

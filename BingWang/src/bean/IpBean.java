@@ -8,6 +8,7 @@ public class IpBean
     private String lastdiscovery;
     private String status;
     private String devicetype;
+    private String brand;
     private String manager;
     private String location;
     private String application;
@@ -71,6 +72,9 @@ public class IpBean
     {
         this.devicetype = devicetype;
     }
+
+    public String getBrand(){return brand;}
+    public void setBrand(String brand){this.brand=brand;}
 
     public String getManager()
     {
