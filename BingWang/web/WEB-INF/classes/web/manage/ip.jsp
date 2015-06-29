@@ -46,6 +46,7 @@
     <th>单位</th>
     <th>IP</th>
       <th>状态</th>
+      <th>操作</th>
     <th>设备类型</th>
     <th>负责人</th>
     <th>品牌</th>
@@ -85,13 +86,13 @@
                 </c:forEach>
             </select>
         </td>
-        <td><input type="text" name="manager" value="${ipb.manager}"></td>
-        <td><input type="text" name="brand" value="${ipb.brand}"></td>
+        <td><input type="text" name="manager" size="12" value="${ipb.manager}"></td>
+        <td><input type="text" name="brand" size="12" value="${ipb.brand}"></td>
         <td><input type="text" name="location" value="${ipb.location}"></td>
-        <td><input type="text" name="application" size="50" value="${ipb.application}"></td>
+        <td><input type="text" name="application" size="45" value="${ipb.application}"></td>
         <input type="hidden" name="ip" value="${ipb.ip}">
             <input type="hidden" name="flag" value="modify">
-        <td><input type="submit" value="提交修改" /></td>
+        <td><input type="submit" value="修改" /></td>
             </form>
     </tr>
                  </c:forEach>

@@ -29,6 +29,8 @@ public class DmainServlet
         ArrayList<OrganizationBean> orgList = getdishi();
         request.setAttribute("orgList", orgList);
         request.setAttribute("area", area);
+        String visitnum=Integer.toString(getVisitnum());
+        request.setAttribute("visitnum", visitnum);
         request.getRequestDispatcher("dishi.jsp").forward(request, response);
     }
 
@@ -83,5 +85,26 @@ public class DmainServlet
             return orgList;
         }
         return orgList;
+    }
+
+    private int getVisitnum()
+    {
+        int num=0;
+        Mysqldb mdb = new Mysqldb();
+        try
+        {
+            String sqlstr = "select count(*) from recordvisit where path=\'/main\'";
+            ResultSet rs = mdb.sql.executeQuery(sqlstr);
+            while (rs.next()){num=Integer.valueOf(rs.getString("COUNT(*)"));}
+            rs.close();
+            mdb.close();
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Error : " + ex.toString());
+            mdb.close();
+            return num;
+        }
+        return num;
     }
 }
