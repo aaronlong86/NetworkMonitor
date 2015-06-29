@@ -33,7 +33,7 @@
 <body>
 <div id="container">
   <div id="header">
-      <h1>广西公安视频专网管理辅助信息1.2</h1>
+      <h1>广西公安视频专网管理辅助信息1.3</h1>
   </div>
     <div id="menu1" bgcolor="#006400">
         <table border="1" align="right">

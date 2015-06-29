@@ -22,27 +22,9 @@
     #footer { height:60px;padding: 60px; background:#9c6;text-align:center;vertical-align:bottom;}
   </style>
 </head>
-<%!
-  synchronized void count() {
-    ServletContext application = getServletContext();
-    Integer num = (Integer)application.getAttribute("num");
-    if (null == num) {
-      num = new Integer(1);
-      application.setAttribute("num", num);
-    } else {
-      num = new Integer(1 + num);
-      application.setAttribute("num", num);
-    }
-  }
-%>
-
 <%
-  if (session.isNew()) { //为了避免用户的刷新的问题
-    count();
-  }
-  Integer tNum = (Integer)application.getAttribute("num");
-  if (tNum==null) {tNum=1;}
   String name=(String)session.getAttribute("name");
+  String visitnum=(String)request.getAttribute("visitnum");
   if (name==null) {name="您";}
 %>
 <%
@@ -51,11 +33,11 @@
 
 <body>
 <div id="container">
-  <div id="header"><h1>广西公安视频专网管理辅助信息1.2</h1></div>
+  <div id="header"><h1>广西公安视频专网管理辅助信息1.3</h1></div>
   <div id="menu1" bgcolor="#006400">
     <table border="1" align="right">
       <tr>
-        <th>欢迎<%=name %>，您是第<%=tNum %>个用户！</th>
+        <th>欢迎<%=name %>，您是第<%=visitnum%>个用户！</th>
         <th>注：本站信息仅供各地辅助管理视频专网，不作为考核依据</th>
       </tr>
     </table>
@@ -67,6 +49,8 @@
         <th><a href="/bingwang/manage/ipseg" target="_blank">IP段管理</a></th>
         <th><a href="/bingwang/manage/ip" target="_blank">设备管理</a></th>
         <th><a href="/bingwang/manage/port" target="_blank">设备端口</a></th>
+        <th><a href="/bingwang/manage/user" target="_blank">用户管理</a></th>
+        <th><a href="http://***" target="_blank">专网考核</a></th>
         <th>
           <c:choose>
             <c:when test="${name==null}">

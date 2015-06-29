@@ -33,7 +33,7 @@
 
 <body>
 <div id="container">
-  <div id="header"><h1>广西公安视频专网管理辅助信息1.2</h1></div>
+  <div id="header"><h1>广西公安视频专网管理辅助信息1.3</h1></div>
   <div id="menu1" bgcolor="#006400">
     <table border="1" align="right">
       <tr>
@@ -49,6 +49,8 @@
         <th><a href="/bingwang/manage/ipseg" target="_blank">IP段管理</a></th>
         <th><a href="/bingwang/manage/ip" target="_blank">设备管理</a></th>
         <th><a href="/bingwang/manage/port" target="_blank">设备端口</a></th>
+        <th><a href="/bingwang/manage/user" target="_blank">用户管理</a></th>
+        <th><a href="http://***" target="_blank">专网考核</a></th>
         <th>
           <c:choose>
             <c:when test="${name==null}">
