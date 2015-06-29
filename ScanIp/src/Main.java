@@ -42,8 +42,8 @@ public class Main {
              // ipScanner1.scanqutingdiv();
       //  }
         IpScanner ipScanner1 = new IpScanner();
-        String ipstart=args[0];
-        String ipend=args[1];
+        String ipstart="10.148.1.1";//args[0];
+        String ipend="10.148.1.255";//args[1];
         ipScanner1.scan(ipstart,ipend);
         //扫描已发现IP的常用端口
        // PortScanner portScanner = new PortScanner();

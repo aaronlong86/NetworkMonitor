@@ -83,7 +83,7 @@ public class IpManageServlet
         try
         {
             String sqlstr = "SELECT t1.ip,t2.area,t1.devicetype,t1.manager,t1.brand,t1.location,t1.application,t1.discoverylasttime from ipdiscovery t1,organization t2 where (t1.areacode like '"
-                    + areacode.substring(0, 6) + "%') and (t1.flag=1) and (t1.areacode=t2.areacode)";
+                    + areacode.substring(0, 4) + "%') and (t1.flag=1) and (t1.areacode=t2.areacode)";
 
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;
@@ -180,7 +180,7 @@ public class IpManageServlet
         try
         {
             String sqlstr = "SELECT * from ipsegment where (flag=1) and (areacode like '"
-                    + areacode.substring(0, 6) + "%') order by ipstart,areacode";
+                    + areacode.substring(0, 4) + "%') order by ipstart,areacode";
 
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;

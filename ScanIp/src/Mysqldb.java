@@ -5,11 +5,11 @@ import java.util.Date;
 
 
 public class Mysqldb {
-	//private String url="jdbc:mysql://127.0.0.1:3306/test";
-	public String url="jdbc:mysql://45.1.2.202:3306/bingwang?useUnicode=true&characterEncoding=utf8";
+	private String url="jdbc:mysql://127.0.0.1:3306/test";
+	//public String url="jdbc:mysql://45.1.2.202:3306/bingwang?useUnicode=true&characterEncoding=utf8";
 	private String user="root";
-	//private String pwd="aaronlong";
-	public String pwd="spjkyyzx2015";
+	private String pwd="aaronlong";
+	//public String pwd="spjkyyzx2015";
 	//建立到MySQL的连接
 	private Connection conn = null;
 	public Statement sql=null;
