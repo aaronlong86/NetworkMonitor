@@ -91,7 +91,6 @@ public class IpSegmentServlet
         {
             SimpleDateFormat disctime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String sqlstr = "insert into ipsegment (area,areacode,ipstart,ipend,level,recorder,recordtime) VALUES('" + area + "','" + areacode + "','" + ipstart + "','" + ipend + "'," + level + ",'" + username + "','" + Timestamp.valueOf(disctime.format(new Date())) + "')";
-
             mdb.sql.executeUpdate(sqlstr);
             mdb.close();
         }

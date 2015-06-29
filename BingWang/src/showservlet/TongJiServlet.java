@@ -70,6 +70,8 @@ public class TongJiServlet
             }
             Collections.sort(completetable, new SortTongji());
             int i = 1;
+            int total=0;
+            int tasknum=0;
             for (Iterator i$ = completetable.iterator(); i$.hasNext(); i++)
             {
                 TongJiBean tongJiBean = (TongJiBean)i$.next();
@@ -77,7 +79,16 @@ public class TongJiServlet
                 s=s.replace("市公安局","");
                 tongJiBean.setArea(s);
                 tongJiBean.setRanking(i);
+                total=tongJiBean.getIpnum()+total;
+                tasknum=tongJiBean.getTasknum()+tasknum;
             }
+            TongJiBean tongJiBean =new TongJiBean();
+            tongJiBean.setArea("广西");
+            tongJiBean.setAreacode("450000000000");
+            tongJiBean.setIpnum(total);
+            tongJiBean.setTasknum(tasknum);
+            tongJiBean.setTaskrate(((float) total) / tasknum);
+            completetable.add(tongJiBean);
             rs.close();
             mdb.close();
         }
@@ -144,13 +155,24 @@ public class TongJiServlet
                 }
             }
             }
+            int total=0;
+            int onlinenum=0;
             for (Iterator i$ = onLineBeanList.iterator(); i$.hasNext();)
             {
                 OnLineBean onLineBean = (OnLineBean)i$.next();
                 String s=onLineBean.getArea().replace("广西","");
                 s=s.replace("市公安局","");
                 onLineBean.setArea(s);
+                total=total+onLineBean.getTotalnum();
+                onlinenum=onlinenum+onLineBean.getOnlinenum();
             }
+            OnLineBean onLineBean =new OnLineBean();
+            onLineBean.setArea("广西");
+            onLineBean.setAreacode("450000000000");
+            onLineBean.setOnlinenum(onlinenum);
+            onLineBean.setTotalnum(total);
+            onLineBean.setOnlinerate(((float)onlinenum)/total);
+            onLineBeanList.add(onLineBean);
             rs.close();
             mdb.close();
         }

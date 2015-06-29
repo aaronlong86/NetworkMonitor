@@ -106,6 +106,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>userServlet</servlet-name>
+        <servlet-class>manageservlet.UserServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>userServlet</servlet-name>
+        <url-pattern>/manage/user</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>ipManageServlet</servlet-name>
         <servlet-class>manageservlet.IpManageServlet</servlet-class>
     </servlet>

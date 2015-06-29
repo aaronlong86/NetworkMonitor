@@ -3,6 +3,7 @@ package bean;
 public class OrganizationBean
 {
     private String area;
+    private String areacode;
 
     public String getArea()
     {
@@ -13,4 +14,7 @@ public class OrganizationBean
     {
         this.area = area;
     }
+
+    public String getAreacode(){return areacode;}
+    public void setAreacode(String areacode){this.areacode=areacode;}
 }
