@@ -35,7 +35,8 @@ public class OfflineServlet extends HttpServlet {
         try
         {
             String sqlstr = "SELECT t1.ip,t2.area,t1.brand,t1.areacode FROM ipdiscovery t1,organization t2 WHERE (t1.devicetype = '交换机') and ((TIMESTAMPDIFF(MINUTE,t1.discoverylasttime,now()))>"
-                    +Integer.toString(Init.scanIpinterval)+") and (t1.areacode=t2.areacode) order by t1.areacode";
+                    +Integer.toString(Init.scanIpinterval)+
+                    ") and (t1.flag=1) and (t1.areacode=t2.areacode) order by t1.areacode";
 
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             while (rs.next())
@@ -71,7 +72,8 @@ public class OfflineServlet extends HttpServlet {
         try
         {
             String sqlstr = "SELECT t1.ip,t2.area,t1.brand,t1.areacode FROM ipdiscovery t1,organization t2 WHERE (t1.devicetype = '视频联网平台') and ((TIMESTAMPDIFF(MINUTE,t1.discoverylasttime,now()))>"
-                    +Integer.toString(Init.scanIpinterval)+") and (t1.areacode=t2.areacode) order by t1.areacode";
+                    +Integer.toString(Init.scanIpinterval)+
+                    ") and (t1.flag=1) and (t1.areacode=t2.areacode) order by t1.areacode";
 
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             while (rs.next())

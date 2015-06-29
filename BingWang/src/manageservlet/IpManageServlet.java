@@ -40,11 +40,17 @@ public class IpManageServlet
         String location = request.getParameter("location");
         String application = request.getParameter("application");
         String ip = request.getParameter("ip");
+        String flag = request.getParameter("flag");
         HttpSession session = request.getSession();
         String areacode = (String)session.getAttribute("areacode");
         String username = (String)session.getAttribute("username");
         if (ip != null) {
-            updateinfo(devicetype, manager, brand, location, application, ip, username);
+            if (flag.equals("modify"))
+            {
+            updateinfo(devicetype, manager, brand, location, application, ip, username);}
+            if (flag.equals("delete")){
+                deleteinfo(ip,username);
+            }
         }
         ArrayList<IpBean> ipBeanList;
         ArrayList<IpSegmentBean> ipsegList;
@@ -76,7 +82,8 @@ public class IpManageServlet
         Mysqldb mdb = new Mysqldb();
         try
         {
-            String sqlstr = "SELECT t1.ip,t2.area,t1.devicetype,t1.manager,t1.brand,t1.location,t1.application,t1.discoverylasttime from ipdiscovery t1,organization t2 where (t1.areacode like '" + areacode.substring(0, 6) + "%') and (t1.areacode=t2.areacode)";
+            String sqlstr = "SELECT t1.ip,t2.area,t1.devicetype,t1.manager,t1.brand,t1.location,t1.application,t1.discoverylasttime from ipdiscovery t1,organization t2 where (t1.areacode like '"
+                    + areacode.substring(0, 6) + "%') and (t1.flag=1) and (t1.areacode=t2.areacode)";
 
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;
@@ -124,7 +131,7 @@ public class IpManageServlet
         Mysqldb mdb = new Mysqldb();
         try
         {
-            String sqlstr = "SELECT t1.ip,t2.area,t1.devicetype,t1.manager,t1.brand,t1.location,t1.application,t1.discoverylasttime from ipdiscovery t1,organization t2 where t1.areacode=t2.areacode order by t1.ip";
+            String sqlstr = "SELECT t1.ip,t2.area,t1.devicetype,t1.manager,t1.brand,t1.location,t1.application,t1.discoverylasttime from ipdiscovery t1,organization t2 where (t1.areacode=t2.areacode) and (t1.flag=1) order by t1.ip";
 
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;
@@ -273,5 +280,27 @@ public class IpManageServlet
             System.out.println("Error : " + ex.toString());
             mdb.close();
         }
+    }
+
+    private boolean deleteinfo(String ip,String username)
+    {
+        Mysqldb mdb = new Mysqldb();
+        try
+        {
+            SimpleDateFormat disctime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String sqlstr = "update ipdiscovery set flag=0,recordtime=\'"+
+                    Timestamp.valueOf(disctime.format(new Date()))+
+                    "\',recorder=\'"+username+"\' where ip=\'"+
+                    ip+"\'";
+            mdb.sql.executeUpdate(sqlstr);
+            mdb.close();
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Error : " + ex.toString());
+            mdb.close();
+            return false;
+        }
+        return true;
     }
 }

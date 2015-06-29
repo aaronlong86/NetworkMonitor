@@ -42,7 +42,10 @@ public class DTongJiServlet
     {
         String str1 = "SELECT t4.area,t4.areacode,t5.tasknum FROM (SELECT  SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1 WHERE t1.area='" + area + "')" + " t2,organization t4,tasknumber t5 WHERE (SUBSTRING(t4.areacode,1,4) = t2.dishicode)" + " and (t5.areacode=t4.areacode) and (t5.level=2) and (t4.areacode LIKE '%000000')";
 
-        String str2 = "SELECT COUNT(*),t4.area,SUBSTRING(t4.areacode, 1, 6) AS xiancode FROM (SELECT  SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1 WHERE t1.area='" + area + "')" + " t2, ipdiscovery t3,organization t4 WHERE (SUBSTRING(t3.areacode,1,4) = " + "t2.dishicode)  and (t4.areacode=t3.areacode) and (t3.areacode LIKE '%000000')" + "and (t3.ip like \"45%\") GROUP BY xiancode";
+        String str2 = "SELECT COUNT(*),t4.area,SUBSTRING(t4.areacode, 1, 6) AS xiancode FROM (SELECT  SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1 WHERE t1.area='"
+                + area + "')" + " t2, ipdiscovery t3,organization t4 WHERE (SUBSTRING(t3.areacode,1,4) = "
+                + "t2.dishicode)  and (t4.areacode=t3.areacode) and (t3.areacode LIKE '%000000')"
+                + "and (t3.ip like \"45%\") and (t3.flag=1) GROUP BY xiancode";
 
         ArrayList<TongJiBean> completetable = new ArrayList();
         Mysqldb mdb = new Mysqldb();
@@ -131,7 +134,7 @@ public class DTongJiServlet
                     " SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1"+
                     " WHERE t1.area=\'"+area+"\')"
                     +" t2, ipdiscovery t3,organization t4 WHERE (SUBSTRING(t3.areacode,1,4) = t2.dishicode)"
-                    +" and (t4.areacode=t3.areacode)"+
+                    +" and (t4.areacode=t3.areacode) and (t3.flag=1)"+
                     " and (t3.areacode LIKE '%000000') GROUP BY xiancode ORDER BY xiancode";
             rs = mdb.sql.executeQuery(str);
             while (rs.next())
@@ -147,7 +150,7 @@ public class DTongJiServlet
                     " SUBSTRING(t1.areacode, 1, 4) AS dishicode FROM organization t1"+
                     " WHERE t1.area=\'"+area+"\')"
                     +" t2, ipdiscovery t3,organization t4 WHERE (SUBSTRING(t3.areacode,1,4) = t2.dishicode)"+
-                    " and (t4.areacode=t3.areacode)"+
+                    " and (t4.areacode=t3.areacode) and (t3.flag=1)"+
                     " and (t3.areacode LIKE '%000000') AND (t3.areacode NOT LIKE '%00000000')"
                     +"and ((TIMESTAMPDIFF(MINUTE,t3.discoverylasttime,now()))<="
                     +Integer.toString(Init.scanIpinterval)+") GROUP BY xiancode ORDER BY xiancode";

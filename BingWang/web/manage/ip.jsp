@@ -55,6 +55,7 @@
   </tr>
   <c:forEach items="${ipBeanList}" var="ipb">
     <tr>
+        <form name="input" action="/bingwang/manage/ip" method="get">
         <td><c:out value="${ipb.id}"></c:out></td>
         <td><c:out value="${ipb.area}"></c:out></td>
         <td><c:out value="${ipb.ip}"></c:out></td>
@@ -71,6 +72,10 @@
                 </c:otherwise>
             </c:choose>
         </td>
+            <input type="hidden" name="ip" value="${ipb.ip}">
+            <input type="hidden" name="flag" value="delete">
+            <td><input type="submit" value="删除" /></td>
+            </form>
         <form name="input" action="/bingwang/manage/ip" method="get">
         <td>
             <select name="devicetype">
@@ -85,6 +90,7 @@
         <td><input type="text" name="location" value="${ipb.location}"></td>
         <td><input type="text" name="application" size="50" value="${ipb.application}"></td>
         <input type="hidden" name="ip" value="${ipb.ip}">
+            <input type="hidden" name="flag" value="modify">
         <td><input type="submit" value="提交修改" /></td>
             </form>
     </tr>

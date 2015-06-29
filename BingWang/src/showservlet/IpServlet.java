@@ -79,11 +79,11 @@ public class IpServlet
             if (rs.next()) {
                 sqlstr = "select t1.ip,t2.area,t1.discoverylasttime,t1.areacode from (SELECT SUBSTRING(t4.areacode,1,4) as dishicode from organization t4 where areacode='"
                         + areacode + "') t3,ipdiscovery t1,organization t2 where (t1.areacode=t2.areacode)"
-                        + " and (SUBSTRING(t2.areacode,1,4)=t3.dishicode) order by t1.areacode,t1.ip";
+                        + "and (t1.flag=1) and (SUBSTRING(t2.areacode,1,4)=t3.dishicode) order by t1.areacode,t1.ip";
             } else {
                 sqlstr = "select t1.ip,t2.area,t1.discoverylasttime,t1.areacode from (SELECT SUBSTRING(t4.areacode,1,6) as xiancode from organization t4 where areacode='"
                         + areacode + "') t3,ipdiscovery t1,organization t2 where (t1.areacode=t2.areacode)"
-                        + " and (level=2) and (SUBSTRING(t2.areacode,1,6)=t3.xiancode) order by t1.areacode,t1.ip";
+                        + "and (t1.flag=1) and (level=2) and (SUBSTRING(t2.areacode,1,6)=t3.xiancode) order by t1.areacode,t1.ip";
             }
             rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;
@@ -132,12 +132,12 @@ public class IpServlet
             if (rs.next()) {
                 sqlstr = "select t1.ip,t2.area,t1.discoverylasttime,t1.areacode from (SELECT SUBSTRING(t4.areacode,1,4) as dishicode from organization t4 where areacode='"
                         + areacode + "') t3,ipdiscovery t1,organization t2 where (t1.areacode=t2.areacode)"
-                        + " and (t1.ip like '" + Integer.toString(ipseg) + "%')" +
+                        + " and (t1.flag=1)  and (t1.ip like '" + Integer.toString(ipseg) + "%')" +
                         " and (SUBSTRING(t2.areacode,1,4)=t3.dishicode) order by t1.areacode,t1.ip";
             } else {
                 sqlstr = "select t1.ip,t2.area,t1.discoverylasttime,t1.areacode from (SELECT SUBSTRING(t4.areacode,1,6) as xiancode from organization t4 where areacode='"
                         + areacode + "') t3,ipdiscovery t1,organization t2 where (t1.areacode=t2.areacode)"
-                        + " and (t2.level=2) and (t1.ip like '" + Integer.toString(ipseg) + "%')" +
+                        + " and (t1.flag=1)  and (t2.level=2) and (t1.ip like '" + Integer.toString(ipseg) + "%')" +
                         " and (SUBSTRING(t2.areacode,1,6)=t3.xiancode) order by t1.areacode,t1.ip";
             }
             rs = mdb.sql.executeQuery(sqlstr);
@@ -187,12 +187,12 @@ public class IpServlet
             if (rs.next()) {
                 sqlstr = "select t1.ip,t2.area,t1.discoverylasttime,t1.areacode from (SELECT SUBSTRING(t4.areacode,1,4) as dishicode from organization t4 where areacode='"
                         + areacode + "') t3,ipdiscovery t1,organization t2 where (t1.areacode=t2.areacode)"
-                        + " and ((TIMESTAMPDIFF(MINUTE,t1.discoverylasttime,now()))>=" +
+                        + " and (t1.flag=1)  and ((TIMESTAMPDIFF(MINUTE,t1.discoverylasttime,now()))>=" +
                         Integer.toString(8) + ")" + " and (SUBSTRING(t2.areacode,1,4)=t3.dishicode) order by t1.areacode,t1.ip";
             } else {
                 sqlstr = "select t1.ip,t2.area,t1.discoverylasttime,t1.areacode from (SELECT SUBSTRING(t4.areacode,1,6) as xiancode from organization t4 where areacode='"
                         + areacode + "') t3,ipdiscovery t1,organization t2 where (t1.areacode=t2.areacode)"
-                        + " and ((TIMESTAMPDIFF(MINUTE,t1.discoverylasttime,now()))>=" + Integer.toString(8)
+                        + " and (t1.flag=1) and ((TIMESTAMPDIFF(MINUTE,t1.discoverylasttime,now()))>=" + Integer.toString(8)
                         + ") and (t2.level=2)" + " and (SUBSTRING(t2.areacode,1,6)=t3.xiancode) order by t1.areacode,t1.ip";
             }
             rs = mdb.sql.executeQuery(sqlstr);
@@ -242,11 +242,11 @@ public class IpServlet
             if (rs.next()) {
                 sqlstr = "select t2.area,t1.ipstart,t1.ipend,t1.areacode from (SELECT SUBSTRING(t4.areacode,1,4) as dishicode from organization t4 where areacode='"
                         + areacode + "') t3,ipsegment t1,organization t2 where (t1.areacode=t2.areacode)"
-                        + " and (SUBSTRING(t2.areacode,1,4)=t3.dishicode) order by t1.areacode,t1.ipstart";
+                        + " and (t1.flag=1) and (SUBSTRING(t2.areacode,1,4)=t3.dishicode) order by t1.areacode,t1.ipstart";
             } else {
                 sqlstr = "select t2.area,t1.ipstart,t1.ipend,t1.areacode from (SELECT SUBSTRING(t4.areacode,1,6) as xiancode from organization t4 where areacode='"
                         + areacode + "') t3,ipsegment t1,organization t2 where (t1.areacode=t2.areacode) and (t2.level=2)"
-                        + " and (SUBSTRING(t2.areacode,1,6)=t3.xiancode) order by t1.areacode,t1.ipstart";
+                        + " and (t1.flag=1) and (SUBSTRING(t2.areacode,1,6)=t3.xiancode) order by t1.areacode,t1.ipstart";
             }
             rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;
