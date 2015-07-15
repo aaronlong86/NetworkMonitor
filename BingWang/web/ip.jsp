@@ -45,7 +45,7 @@
                   <th>序号 </th>
                   <th>单位</th>
                   <th>IP</th>
-                  <th>最近扫描发现时间</th>
+                  <th>最近上线时间</th>
                   <th>状态</th>                
               </tr>
   <c:forEach items="${ipBeanList}" var="ipb">

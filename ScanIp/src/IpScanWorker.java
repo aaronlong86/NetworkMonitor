@@ -25,8 +25,8 @@ public class IpScanWorker implements Runnable{
             if(inetAddress.isReachable(5000)) { // wait 5 seconds
                 String ip = inetAddress.getHostAddress();
                 String hostname = inetAddress.getHostName();
-                String mac = GetMacAddress.getMacAddress(ipStr);
-                //String mac=GetMacAddress.getMacInLinux(ipStr).trim();
+                //String mac = GetMacAddress.getMacAddress(ipStr);
+                String mac=GetMacAddress.getMacInLinux(ipStr).trim();
                 System.out.println("DiscoverIp:HostName:" + hostname + ",Ip:" + ip + ",Mac:" + mac);
                 InsertDiscoverIp(ip, hostname, mac, areacode);
             }
@@ -55,7 +55,7 @@ public class IpScanWorker implements Runnable{
                 str="insert into ipdiscovery (ip,mac,hostname,discoveryfirsttime,areacode) values(\'"
                         + ip + "\',\'" + mac + "\',\'" + hostname + "\',\'" + Timestamp.valueOf(disctime.format(new Date()))
                         + "\',\'" + areacode + "\')";
-                System.out.println("new ip,inserted:" + ip + " into mydb.");			                          }
+                System.out.println("new ip,inserted:" + ip + " into bingwangdb.");			                          }
             mdb.sql.executeUpdate(str);
             b=true;
             mdb.close();

@@ -5,11 +5,11 @@ import java.util.Date;
 
 
 public class Mysqldb {
-	private String url="jdbc:mysql://127.0.0.1:3306/test";
-	//public String url="jdbc:mysql://45.1.2.202:3306/bingwang?useUnicode=true&characterEncoding=utf8";
+	//private String url="jdbc:mysql://127.0.0.1:3306/test";
+	public String url="jdbc:mysql://45.1.2.202:3306/bingwang?useUnicode=true&characterEncoding=utf8";
 	private String user="root";
-	private String pwd="aaronlong";
-	//public String pwd="spjkyyzx2015";
+	//private String pwd="aaronlong";
+	public String pwd="spjkyyzx2015";
 	//建立到MySQL的连接
 	private Connection conn = null;
 	public Statement sql=null;
@@ -39,8 +39,9 @@ public class Mysqldb {
 		Mysqldb mdb = new Mysqldb();
 		try
 		{ 	String sqlstr ="";
-			if (areacode==""){sqlstr="select ip,areacode from ipdiscovery order by ip";}
-			else {sqlstr="select ip,areacode from ipdiscovery where areacode="+areacode+" order by ip";}
+			if (areacode==""){sqlstr="select ip,areacode from ipdiscovery where flag=1 order by ip";}
+			else {sqlstr="select ip,areacode from ipdiscovery where (flag=1) and (areacode="
+					+areacode+") order by ip";}
 			ResultSet rs = mdb.sql.executeQuery(sqlstr);
 			while (rs.next())
 			{

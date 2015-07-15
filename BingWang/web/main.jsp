@@ -18,8 +18,8 @@
     #menu2 {font-weight: bold;font-size:20px;height:30px; background:#693; margin-bottom:3px;}
     #mainContent { height:1200px; margin-bottom:3px;position:relative;vertical-align:top;}
     #sidebar {font-size:20px; float:left; width:200px; height:1200px;border: solid;vertical-align:top; background:#cf9;}
-    #sidebar2 {float:right; width:450px; height:1200px; background:#cf9;}
-    #content {margin:0 455px 0 205px !important; margin:0 452px 0 202px;border: solid;vertical-align:top; height:1200px; background:#ffa;}
+    #sidebar2 {float:right; width:450px; height:1200px;border: solid;vertical-align:top;background:#cf9;}
+    #content {margin:0 455px 0 215px !important; margin:0 452px 0 202px;border: solid;vertical-align:top; height:1200px; background:#ffa;}
     #footer { height:60px;padding: 60px; background:#9c6;text-align:center;vertical-align:bottom;}
   </style>
  </head>
@@ -51,7 +51,7 @@
               <th><a href="/bingwang/manage/ip" target="_blank">设备管理</a></th>
               <th><a href="/bingwang/manage/port" target="_blank">设备端口</a></th>
               <th><a href="/bingwang/manage/user" target="_blank">用户管理</a></th>
-              <th><a href="http://***" target="_blank">专网考核</a></th>
+              <th><a href="http://172.1.2.12:8080/yy-yunwei" target="_blank">专网考核</a></th>
               <th>
                   <c:choose>
                       <c:when test="${name==null}">
@@ -91,6 +91,7 @@
   </div>
   <div id="footer">本软件为农忠海所开发，如有建议与意见请反馈，谢谢！
     <br>建议使用<a href="/bingwang/360se7.zip">最新版360浏览器（点击下载）</a>的极速模式或IE9.0以上非兼容模式
+    <br><a href="/bingwang/putty_cn.zip">putty_cn（点击下载）</a>
   </div>
 </div>
 </body>

@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import sys.Init;
 import sys.Mysqldb;
 
 @WebServlet(name="IpServlet")
@@ -97,11 +98,11 @@ public class IpServlet
                 Date datenow = new Date();
                 SimpleDateFormat disctime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date datepre = disctime.parse(rs.getString("discoverylasttime"));
-                long l = (datenow.getTime() - datepre.getTime()) / 60000L;
+                int l = (int)((datenow.getTime() - datepre.getTime()) / 60000L);
                 String status = "offline";
-                if (l < 8L) {
+                if (l < Init.scanIpinterval) {
                     status = "online";
-                } else if (l < 16L) {
+                } else if (l < (Init.scanIpinterval*2)) {
                     status = "warning";
                 }
                 ipBean.setStatus(status);
@@ -152,11 +153,11 @@ public class IpServlet
                 Date datenow = new Date();
                 SimpleDateFormat disctime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date datepre = disctime.parse(rs.getString("discoverylasttime"));
-                long l = (datenow.getTime() - datepre.getTime()) / 60000L;
+                int l = (int)((datenow.getTime() - datepre.getTime()) / 60000L);
                 String status = "offline";
-                if (l <= 8L) {
+                if (l <= Init.scanIpinterval) {
                     status = "online";
-                } else if (l <= 16L) {
+                } else if (l <= (Init.scanIpinterval*2)) {
                     status = "warning";
                 }
                 ipBean.setStatus(status);
@@ -207,11 +208,11 @@ public class IpServlet
                 Date datenow = new Date();
                 SimpleDateFormat disctime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date datepre = disctime.parse(rs.getString("discoverylasttime"));
-                long l = (datenow.getTime() - datepre.getTime()) / 60000L;
+                int l = (int)((datenow.getTime() - datepre.getTime()) / 60000L);
                 String status = "offline";
-                if (l <= 8L) {
+                if (l <= Init.scanIpinterval) {
                     status = "online";
-                } else if (l <= 16L) {
+                } else if (l <= (Init.scanIpinterval*2)) {
                     status = "warning";
                 }
                 ipBean.setStatus(status);

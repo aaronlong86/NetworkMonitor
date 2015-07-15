@@ -21,13 +21,15 @@ h2{text-align:center;font-weight: 900;font-size: 100%;background-color:red;color
   <th style="width:50px">网络设备</th>
   <th style="width:50px">品牌</th>
   <th>状态</th>                           
+  <th>最近上线时间</th>                           
   </tr>
   <c:forEach items="${network}" var="nw">
     <tr>
-      <td><c:out value="${nw.area}"></c:out></td>
+      <td width="60"><c:out value="${nw.area}"></c:out></td>
       <td><c:out value="${nw.ip}"></c:out></td>
       <td><c:out value="${nw.brand}"></c:out></td>
       <td><h2>&#935;</h2></td>
+      <td><c:out value="${nw.lastdiscovery}"></c:out></td>
     </tr>
   </c:forEach>
           </table>
@@ -39,13 +41,15 @@ h2{text-align:center;font-weight: 900;font-size: 100%;background-color:red;color
     <th style="width:50px">视频联网平台</th>
     <th style="width:50px">品牌</th>
     <th>状态</th>                           
+    <th>最近上线时间</th>                           
   </tr>
   <c:forEach items="${platform}" var="pf">
     <tr>
-      <td><c:out value="${pf.area}"></c:out></td>
+      <td width="60"><c:out value="${pf.area}"></c:out></td>
       <td><c:out value="${pf.ip}"></c:out></td>
       <td><c:out value="${pf.brand}"></c:out></td>
       <td><h2>&#935;</h2></td>
+      <td><c:out value="${pf.lastdiscovery}"></c:out></td>
     </tr>
   </c:forEach>
           </table>

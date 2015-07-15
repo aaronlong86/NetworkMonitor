@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Snmp:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Snmp_jar</output-path>
+    <root id="archive" name="Snmp.jar">
+      <element id="module-output" name="Snmp" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Snmp/snmp4j-2.3.3.jar" path-in-jar="/" />
+      <element id="library" level="project" name="snmp4j-2.3.3-javadoc" />
+    </root>
+  </artifact>
+</component>

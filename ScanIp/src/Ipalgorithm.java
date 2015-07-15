@@ -10,7 +10,7 @@ public class Ipalgorithm {
     public Ipalgorithm(){
         Mysqldb mdb =new Mysqldb();
         try
-        { 	ResultSet rs = mdb.sql.executeQuery("select ipstart,ipend,areacode from ipsegment order by areacode");
+        { 	ResultSet rs = mdb.sql.executeQuery("select ipstart,ipend,areacode from ipsegment WHERE flag=1 order by areacode");
             while (rs.next()) {
                 this.allipseg.add(rs.getString("ipstart"));
                 this.allipseg.add(rs.getString("ipend"));

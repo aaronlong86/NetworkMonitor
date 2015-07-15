@@ -50,7 +50,7 @@
         <th><a href="/bingwang/manage/ip" target="_blank">设备管理</a></th>
         <th><a href="/bingwang/manage/port" target="_blank">设备端口</a></th>
         <th><a href="/bingwang/manage/user" target="_blank">用户管理</a></th>
-        <th><a href="http://***" target="_blank">专网考核</a></th>
+        <th><a href="http://172.1.2.12:8080/yy-yunwei" target="_blank">专网考核</a></th>
         <th>
           <c:choose>
             <c:when test="${name==null}">

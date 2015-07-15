@@ -14,8 +14,8 @@ import java.util.concurrent.*;
  *
  */
 public class IpScanner {
-    private int corePoolSize=150;
-    private int maximumPoolSize=300;
+    private int corePoolSize=200;
+    private int maximumPoolSize=400;
     private long keepAliveTime=5000;
     private BlockingDeque<Runnable> workQueue=new LinkedBlockingDeque<Runnable>();
     private ExecutorService threadPoolExecutor=new ThreadPoolExecutor(corePoolSize,maximumPoolSize,keepAliveTime,
@@ -130,7 +130,6 @@ public class IpScanner {
         //±È¿˙À˘”–IP
         for (int i=0;i<(iplist.size()-1);i++)
         {
-
             if (Ipalgorithm.validate(iplist.get(i)))
             {   String ipStr = iplist.get(i);
                 String areacode=iplist.get(i+1);

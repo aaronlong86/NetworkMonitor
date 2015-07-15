@@ -1,0 +1,758 @@
+/**
+ * Created by Administrator on 2015/7/11 0011.
+ * Java的snmp获取网络速度问题
+ * 代码很长，先说问题：
+ 第一，如何读取mib库，这里只是传了OID值，我觉得方法应该是这三种 get，getnext，walk，但是假设我想获取 网络输入速度  网络输出速度 发送包数  接收包数 ，改如何获取，因为有时候是叶子节点的直接用get，不是叶子节点的 walk，那个oid.索引  明白的说详细点。。
+ 第二，snmp版本问题我一直是测试v1 v2的，v3还没测试，还要加论证，加密才能获取相关信息？。。晕。。
+ 第三，请高手帮忙测试一下，为什么我总是得到的结果是超时///
+
+ 谢谢！！！！
+
+ 用到的包 snmp4j  log4j
+ */
+//第一步测试Main方法：
+
+//Java code
+public class MainSnmpWalk{
+    static Logger log = Logger.getLogger(MainSnmpWalk.class);
+    public MainSnmpWalk(){
+    }
+
+    public static void main(String[] args) throws InterruptedException{
+
+//建立一个SNMPv2c PDU,它会从system(1.3.6.1.2.1.1)OID开始游走
+//        SnmpWalk walk = new SnmpWalk("192.168.100.10","1.3.6.1.2.1.1.5.0");//物理位置
+//        SnmpWalk walk = new SnmpWalk("127.0.0.1",".1.3.6.1.2.1.25.2.2");//RAM
+//        SnmpWalk walk = new SnmpWalk("127.0.0.1","1.3.6.1.2.1.25.2.3.1.6");//Hard Disk
+//        SnmpWalk walk = new SnmpWalk("127.0.0.1",".1.3.6.1.2.1.25.5.1.1.1");//CPU Utilization
+
+//        SnmpWalk walk = new SnmpWalk("127.0.0.1","1.3.6.1.2.1.25.1");//也含本机物理总内存
+        //cpu:1.3.6.1.2.1.25.5.1.1.1
+        //memory:1.3.6.1.2.1.25.5.1.1.2 //得到的是每个进程的的内存使用值
+
+        //1.3.6.1.2.1.25.3.3.1.2.1 //一个比较通用的看设备CPU利用率的OID值。取最后一分钟的平均值。
+
+
+        // Linux下可以.1.3.6.1.2.1.25.2和.1.3.6.1.2.1.25.5这两个值试试
+        //====================================================
+
+        //.1.3.6.1.4.1.311.1.1.3.1.1.1.2.0
+
+//        SnmpWalk walk = new SnmpWalk("10.8.0.90","1.3.6.1.2.1.1.1");//系统描述
+//        SnmpWalk walk = new SnmpWalk("127.0.0.1","1.3.6.1.2.1.25.1.7.0");//本机物理总内存
+//        SnmpWalk walk = new SnmpWalk("127.0.0.1",".1.3.6.1.2.1.25.4.2.1.2");//列出系统进程
+//        SnmpWalk walk = new SnmpWalk("127.0.0.1",".1.3.6.1.4.1.77.1.2.25.1.1");//列出系统用户列表
+//        SnmpWalk walk = new SnmpWalk("127.0.0.1",".1.3.6.1.4.1.77.1.4.1");//列出域名(工作组)
+//        SnmpWalk walk = new SnmpWalk("127.0.0.1",".1.3.6.1.2.1.25.6.3.1.2");//列出安装的软件
+
+
+//        SnmpWalk walk = new SnmpWalk("127.0.0.1",".1.3.6.1.2.1.25.3.3.1.2");
+
+        //SnmpWalk walk = new SnmpWalk("127.0.0.1",".1.3.6.1.2.1.25.4.2.1.2");//当前进程列表
+
+        //可用的内存数量: .1.3.6.1.4.1.311.1.1.3.1.1.1.2.0
+        //磁盘利用率的OID: .1.3.6.1.4.1.311.1.1.3.1.1.5.1.3.0
+        //CPU的利用率: .1.3.6.1.4.1.311.1.1.3.1.1.2.1.3.1.48.0
+        //发送的字节数(包括组帧字符): 1.3.6.1.2.1.2.2.1.16.1
+        //收到的字节数(包括组帧字符): 1.3.6.1.2.1.2.2.1.10.1
+
+        //cpuPercentProcessorTime .1.3.6.1.4.1.311.1.1.3.1.1.2.1.3
+        //memoryAvailableKBytes (OID: .1.3.6.1.4.1.311.1.1.3.1.1.1.29)
+        //memoryAvailableMBytes (OID: .1.3.6.1.4.1.311.1.1.3.1.1.1.30)
+
+//==================================================================================
+//        log.debug("Doing SNMPv2 walk..");
+        //1.3.6.1.2.1.1.6.0
+//          SnmpWalk walk = new SnmpWalk("192.168.100.57","1.3.6.1.2.1.1.4.0");//1.3.6.1.2.1.1.5.0
+//          String str = walk.doWalk();
+//          log.debug("主方法str: "+ str);
+
+//==================================================================================
+        /**
+         * 在Windows操作系统上默认是没有安装snmp协议的，需要安装snmp，安装细节较简单，这里不再描述
+         * 1.在Windows上安装好了snmp之后，它默认是不支持SNMPv3的，需要重新安装一个SNMPv3的代理
+         * 2.在Windows上直接安装软件：snmpv3agent setup.exe并配置好安全名称(用户)、认证协订、认证密码、保密协定以及保密密码
+         * 3.设置好了之后，在代码里直接相对应就OK了.
+         */
+        //.1.3.6.1.4.1.77.1.2.25.1.1 //1.3.6.1.2.1.1.5.0
+        // 用来设定安全名称(用户)、认证协订、认证的通行密码、保密协定以及保密的通行密码
+        log.debug("doing snmpv3 walk..");
+        //建立一个snmpv3c pdu,它会以kschmidt做为安全名称,md5做为认证协定
+
+//        SnmpWalk walk = new SnmpWalk("192.168.100.10","1.3.6.1.2.1.1.6.0","zmq","MD5","mysnmpzmq","DES","mysnmpzmq");
+//        String str3 = walk.doWalk();
+//        log.debug("主方法str: "+ str3);
+
+//          SnmpWalk walk = new SnmpWalk("192.168.100.11","1.3.6.1.2.1.1.6.0","zmq","MD5","mysnmpzmq","DES","mysnmpzmq");
+        SnmpWalk walk2 = new SnmpWalk("192.168.100.10","1.3.6.1.2.1.1.1.0"); //.1.3.6.1.2.1.2.3.1.6
+        String str3 = walk2.doWalk();
+//        String str4 = walk2.doWalk();
+//          log.debug("主方法str: "+ str3);
+        System.out.println("---result---"+str3);
+//          System.out.println("---result2---"+str4);
+    }
+}
+
+
+
+//第二步:类SnmpWalk.java
+
+
+public class SnmpWalk {
+    public static final int WALK = 1;
+    private SnmpUtil _util = null;
+    //会建立一出一个SNMPv2c walk命令,引数是"执行agent的主机"以及"我们想要游走之OIDs的前缀(prefix)"
+    public SnmpWalk(String host, String oid){
+        _util = new SnmpUtil(host,oid,false,0);
+        _util.setOperation(WALK);
+    }
+
+    //会建立出一个SNMPv3 walk命令,前两个引数与上面建构式一样,其它引数则与SNMPv3的安全设定有关
+    public SnmpWalk(String host, String oid, String user, String authProtocol, String authPasshrase, String privProtocol, String privPassphrase) {
+        _util = new SnmpUtil(host,oid,user,authProtocol,authPasshrase,privProtocol,privPassphrase,false,0);
+        _util.setOperation(WALK);
+    }
+    public String doWalk() {
+        return _util.sendAndProcessResponse();
+    }
+}
+
+//第三部分:
+public class SnmpUtil extends Thread implements PDUFactory, CommandResponder {
+    //    private static Logger log = Logger.getLogger(SnmpUtil.class);
+    public static final int DEFAULT = 0;
+    public static final int WALK = 1;
+
+    private Target _target;
+    private Address _address;
+    private OID _authProtocol;
+    private OID _privProtocol;
+    private OctetString _privPassphrase;
+    private OctetString _authPassphrase;
+    private OctetString _community = new OctetString("mysnmp"); //你自己的community
+
+    private OctetString _contextEngineID; //SnmpEngineId s = null;
+    private OctetString _contextName = new OctetString();
+
+    private OctetString _securityName = new OctetString();
+    private static Snmp _snmp = null;
+    private int _numThreads = 1;
+    private int _port = 0;
+    private ThreadPool _threadPool = null;
+    private boolean _isReceiver = false;
+    private OctetString _authoritativeEngineID = new OctetString("1234567");
+    private TransportMapping _transport = null;
+    private TimeTicks _sysUpTime = new TimeTicks(0);
+    private OID _trapOID = new OID("1.3.6.1.2.1.1.1.0");//此处修改...
+    private int _version = 0;
+    private int _retries = 1;
+    private int _timeout = 4000;
+    private int _pduType = 0;
+    private Vector _vbs = new Vector();
+
+    protected int _operation = DEFAULT;
+    static {
+        if (System.getProperty("log4j.configuration") == null) {
+            BasicConfigurator.configure();
+        }
+    }
+
+    public SnmpUtil(String host, String varbind, boolean receiver, int type) {
+        _version = SnmpConstants.version2c;
+        _isReceiver = receiver;
+        if (type == 2) {
+            _pduType = PDU.INFORM;
+        } else if (type == 1) {
+            _pduType = PDU.TRAP;
+        } else if (type == 0) {
+            _pduType = PDU.SET;
+        }
+
+        setPort();
+
+        if (!_isReceiver) {
+            init(host, varbind);
+        } else {
+            initReceiver(host);
+        }
+    }
+
+    // 用来设定安全名称(用户)、认证协订、认证的通行密码、保密协定以及保密的通行密码
+
+    // 保密的通行密码、认证的通行密码以及用户在内部都会被储成一个OctetString(与String不同,OctetString被实作成一个
+    // 与字符集无关的位元组字串)
+
+    // 认证和保密协定在内部会被储存成OIDs
+    public SnmpUtil(String host, String varbind, String user,
+                    String authProtocol, String authPasshrase,
+                    String privProtocol,
+                    String privPassphrase, boolean receiver, int type) {
+
+        _version = SnmpConstants.version3;
+        _isReceiver = receiver;
+        _privPassphrase = new OctetString(privPassphrase);
+        _authPassphrase = new OctetString(authPasshrase);
+        _securityName = new OctetString(user);
+
+        if (authProtocol.equals("MD5")) {
+            _authProtocol = AuthMD5.ID;
+        } else if (authProtocol.equals("SHA")) {
+            _authProtocol = AuthSHA.ID;
+        }
+
+        if (privProtocol.equals("DES")) {
+            _privProtocol = PrivDES.ID;
+        } else if ((privProtocol.equals("AES128"))
+                || (privProtocol.equals("AES"))) {
+            _privProtocol = PrivAES128.ID;
+        } else if (privProtocol.equals("AES192")) {
+            _privProtocol = PrivAES192.ID;
+        } else if (privProtocol.equals("AES256")) {
+            _privProtocol = PrivAES256.ID;
+        }
+        if (type == 2) {
+            _pduType = PDU.INFORM;
+        } else if (type == 1) {
+            _pduType = PDU.TRAP;
+        } else if (type == 0) {
+            _pduType = PDU.SET;
+        }
+        setPort();
+
+        if (!_isReceiver) {
+            init(host, varbind);
+        } else {
+            initReceiver(host);
+        }
+    }
+
+    public void setVersion(int version) {
+        _version = version;
+    }
+
+    public void setOperation(int operation) {
+        _operation = operation;
+        if (_operation == WALK) {
+//            log.debug("==setOperation is==" + operation);
+            _pduType = PDU.GETNEXT;
+            _pduType = PDU.GET;
+        }
+    }
+
+    public int getOperation() {
+        return _operation;
+    }
+
+    public int getPduType() {
+        return _pduType;
+    }
+
+    public void setPort() {
+        if (_pduType == PDU.INFORM || _pduType == PDU.TRAP || _isReceiver) {
+            _port = 162;
+        } else {
+            _port = 161;
+        }
+    }
+
+    public void init(String host, String varbind) {
+        _vbs = getVariableBinding(varbind);
+        if (_pduType == PDU.INFORM || _pduType == PDU.TRAP) {
+            checkTrapVariables(_vbs);
+        }
+        _address = new UdpAddress(host + "/" + _port);
+        LogFactory.setLogFactory(new Log4jLogFactory());
+        org.snmp4j.asn1.BER.setCheckSequenceLength(false);
+    }
+
+    public Vector getVariableBindings() {
+        return _vbs;
+    }
+
+    // 如果使用的是SNMPv3,则会调用addUsmUser(snmp)方法,以便把一个用户加入此期程.<<BB
+    // 接着会呼叫createTarget()
+    private void addUsmUser(Snmp snmp) {
+        snmp.getUSM().addUser(
+                _securityName,
+                new UsmUser(_securityName, _authProtocol, _authPassphrase,
+                        _privProtocol, _privPassphrase));
+    }
+
+    // 第一步:创建一个SNMP期程(session),如果使用的是SNMPv3,则会调用addUsmUser(snmp)方法=============AA
+    private Snmp createSnmpSession() throws Exception {
+        AbstractTransportMapping transport;
+        if (_address instanceof TcpAddress) {
+            transport = new DefaultTcpTransportMapping();
+        } else {
+            transport = new DefaultUdpTransportMapping();
+        }
+        // Could save some CPU cycles:
+        // transport.setAsyncMsgProcessingSupported(false);
+        Snmp snmp = new Snmp(transport);
+
+        if (_version == SnmpConstants.version3) {
+            USM usm = new USM(SecurityProtocols.getInstance(),
+                    new OctetString(MPv3.createLocalEngineID()), 0);
+            SecurityModels.getInstance().addSecurityModel(usm);
+            addUsmUser(snmp);
+        }
+        return snmp;
+    }
+
+    // 建立一个目标:这所建立的若不是一个SNMPv3,就是一个SNMPv1和SNMPv2
+    private Target createTarget() { // CC
+        if (_version == SnmpConstants.version3) {
+            UserTarget target = new UserTarget();
+            if (_authPassphrase != null) {
+                if (_privPassphrase != null) {
+                    target.setSecurityLevel(SecurityLevel.AUTH_PRIV);
+                } else {
+                    target.setSecurityLevel(SecurityLevel.AUTH_NOPRIV);
+                }
+            } else {
+                target.setSecurityLevel(SecurityLevel.NOAUTH_NOPRIV);
+            }
+            target.setSecurityName(_securityName);
+            return target;
+        } else {
+            CommunityTarget target = new CommunityTarget();
+            target.setCommunity(_community);
+            return target;
+        }
+    }
+
+    // 一旦我们从createTarget()返回，send()方法会为该目标设定版本、位址、逾时和尝试次数等值
+    // 它还会让所有的传输对映(transport mappings)进入监听模式,这确保我们能够回应SNMP引擎所发现到的请求
+    public PDU send() throws Exception {
+        _snmp = createSnmpSession();
+        this._target = createTarget();
+        _target.setVersion(_version);
+        _target.setAddress(_address);
+        _target.setRetries(_retries);
+        _target.setTimeout(_timeout);
+        _snmp.listen();
+
+        PDU request = createPDU(_target);
+        for (int i = 0; i < _vbs.size(); i++) {
+            request.add((VariableBinding) _vbs.get(i));
+        }
+
+        PDU response = null;
+        if (_operation == WALK) {
+            response = walk(_snmp, request, _target);
+        } else {
+            ResponseEvent responseEvent;
+            long startTime = System.currentTimeMillis();
+            responseEvent = _snmp.send(request, _target);
+            if (responseEvent != null) {
+                response = responseEvent.getResponse();
+//                log.debug("=第241行==responseEvent.getResponse()===: "
+//                          + responseEvent.getResponse());
+//                log.debug("Received response after "
+//                          + (System.currentTimeMillis() - startTime) +
+//                          " millis");
+            }
+        }
+        _snmp.close();
+        return response;
+    }
+
+    private static String hexString = "0123456789ABCDEF";
+    public static String toStringHex(String bytes) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(bytes.length() /
+                2);
+        //将每2位16进制整数组装成一个字节
+        for (int i = 0; i < bytes.length(); i += 2) {
+            baos.write((hexString.indexOf(bytes.charAt(i)) << 4 |
+                    hexString.indexOf(bytes.charAt(i + 1))));
+        }
+        return new String(baos.toByteArray());
+    }
+
+
+
+//以下过长，待续。。。
+//接上面 ........
+protected static String printVariableBindings(PDU response) {
+    String strCom = "";
+    for (int i = 0; i < response.size(); i++) {
+        VariableBinding vb = response.get(i);
+        String[] str = vb.getVariable().toString().toUpperCase().split(":");
+
+        String strOut = "";
+        int intLength = str.length;
+//            log.debug("长度==> " + intLength);
+        for (int j = 0; j < intLength; j++) {
+            strOut += str[j];
+        }
+
+//            log.debug("==第270=vb.getOid()=" + vb.getOid());
+        System.out.println("==第283行=vb.getVariable()=" + vb.getVariable());
+        strCom += vb.getVariable();
+        if (str.length != 1) {
+//                log.debug("==第284行=vb.getVariable()=" + toStringHex(strOut)); //显示中文
+        }
+    }
+    return strCom;
+
+}
+
+    protected static String printReport(PDU response) {
+        if (response.size() < 1) {
+            System.out
+                    .println("REPORT PDU does not contain a variable binding.");
+            return "";
+        }
+
+        VariableBinding vb = response.get(0);
+        OID oid = vb.getOid();
+//        if (SnmpConstants.usmStatsUnsupportedSecLevels.equals(oid)) {
+////            log.info("REPORT: Unsupported Security Level.");
+//
+//        } else if (SnmpConstants.usmStatsNotInTimeWindows.equals(oid)) {
+//            log.info("REPORT: Message not within time window.");
+//
+//        } else if (SnmpConstants.usmStatsUnknownUserNames.equals(oid)) {
+//            log.info("REPORT: Unknown user name.");
+//
+//        } else if (SnmpConstants.usmStatsUnknownEngineIDs.equals(oid)) {
+//            log.info("REPORT: Unknown engine id.");
+//
+//        } else if (SnmpConstants.usmStatsWrongDigests.equals(oid)) {
+//            log.info("REPORT: Wrong digest.");
+//
+//        } else if (SnmpConstants.usmStatsDecryptionErrors.equals(oid)) {
+//            log.info("REPORT: Decryption error.");
+//
+//        } else if (SnmpConstants.snmpUnknownSecurityModels.equals(oid)) {
+//            log.info("REPORT: Unknown security model.");
+//
+//        } else if (SnmpConstants.snmpInvalidMsgs.equals(oid)) {
+//            log.info("REPORT: Invalid message.");
+//
+//        } else if (SnmpConstants.snmpUnknownPDUHandlers.equals(oid)) {
+//            log.info("REPORT: Unknown PDU handler.");
+//
+//        } else if (SnmpConstants.snmpUnavailableContexts.equals(oid)) {
+//            log.info("REPORT: Unavailable context.");
+//
+//        } else if (SnmpConstants.snmpUnknownContexts.equals(oid)) {
+//            log.info("REPORT: Unknown context.");
+//
+//        } else {
+//            log.info("REPORT contains unknown OID (" + oid.toString() + ").");
+//
+//        }
+
+        System.out.println(" Current counter value is "
+                + vb.getVariable().toString() + ".");
+        return vb.getVariable().toString();
+    }
+
+    // 可以为SNMPv3建立一个ScopedPDU,或是为SNMPv1和SNMPv2c建立一个PDU
+    // 它会为ScopedPDU设定context Name和context Engine ID.
+    // 最后传回的PDU，会被当成变数request,而且捎后可供其它方法使用
+    public PDU createPDU(Target target) {
+        PDU request;
+        if (_target.getVersion() == SnmpConstants.version3) {
+            request = new ScopedPDU();
+            ScopedPDU scopedPDU = (ScopedPDU) request;
+            if (_contextEngineID != null) {
+                scopedPDU.setContextEngineID(_contextEngineID);
+            }
+            if (_contextName != null) {
+                scopedPDU.setContextName(_contextName);
+            }
+        } else {
+            request = new PDU();
+        }
+        request.setType(_pduType);
+
+        return request;
+    }
+
+    private Vector getVariableBinding(String varbind) {
+        Vector v = new Vector(varbind.length());
+        String oid = null;
+        char type = 'i';
+        String value = null;
+        int equal = varbind.indexOf("={");
+        if (equal > 0) {
+            oid = varbind.substring(0, equal);
+            type = varbind.charAt(equal + 2);
+            value = varbind.substring(varbind.indexOf('}') + 1);
+        } else {
+            v.add(new VariableBinding(new OID(varbind)));
+            return v;
+        }
+
+        VariableBinding vb = new VariableBinding(new OID(oid));
+        if (value != null) {
+            Variable variable;
+            switch (type) {
+                case 'i':
+                    variable = new Integer32(Integer.parseInt(value));
+                    break;
+                case 'u':
+                    variable = new UnsignedInteger32(Long.parseLong(value));
+                    break;
+                case 's':
+                    variable = new OctetString(value);
+                    break;
+                case 'x':
+                    variable = OctetString.fromString(value, ':', 16);
+                    break;
+                case 'd':
+                    variable = OctetString.fromString(value, '.', 10);
+                    break;
+                case 'b':
+                    variable = OctetString.fromString(value, ' ', 2);
+                    break;
+                case 'n':
+                    variable = new Null();
+                    break;
+                case 'o':
+                    variable = new OID(value);
+                    break;
+                case 't':
+                    variable = new TimeTicks(Long.parseLong(value));
+                    break;
+                case 'a':
+                    variable = new IpAddress(value);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Variable type " + type
+                            + " not supported");
+            }
+            vb.setVariable(variable);
+        }
+        v.add(vb);
+        return v;
+    }
+
+    // 继createPDU()方法后
+    // 因为request是一个PDU实体，呼叫get(0)会传回一个VariableBinding.
+    // 在一个VariableBinding上呼叫getOid()会为VariableBinding取得它的OID
+    private static PDU walk(Snmp snmp, PDU request, Target target) throws
+            Exception {
+        request.setNonRepeaters(0);
+        OID rootOID = request.get(0).getOid(); // 首先取得root OID
+        PDU response = null;
+        int objects = 0;
+        int requests = 0;
+        long startTime = System.currentTimeMillis();
+        // 该代码段会按字典编纂顺序在我们想要游走的MIB树中取回下一个物件,以及从目标取得回应.
+        // 如查回应为null,则我们不会收到回应
+        do {
+            requests++;
+            ResponseEvent responseEvent = _snmp.send(request, target);
+            response = responseEvent.getResponse();
+            if (response != null) {
+                objects += response.size();
+            }
+        } while (!processWalk(response, request, rootOID));
+
+//        log.info("Total requests sent:    " + requests);
+//        log.info("Total objects received: " + objects);
+//        log.info("Total walk time:        "
+//                 + (System.currentTimeMillis() - startTime) + " milliseconds");
+        return response;
+    }
+
+    // 如果我们抵达MIB的结尾、收到一个错误讯息，或是所收到的回应在我们所游走的MIB中并未按照字典编纂次序，则返回true
+    // 否则印出目标送来的结果。在请求物件中对所收到的OID进行编码，所以当我们送出下一个请求时，目标将会(按字典编纂次序)
+    // 传送给我们树中下一个OID，如果存在的话
+    private static boolean processWalk(PDU response, PDU request, OID rootOID) {
+        if ((response == null) || (response.getErrorStatus() != 0)
+                || (response.getType() == PDU.REPORT)) {
+            return true;
+        }
+        boolean finished = false;
+        OID lastOID = request.get(0).getOid();
+        for (int i = 0; (!finished) && (i < response.size()); i++) {
+            VariableBinding vb = response.get(i);
+            if ((vb.getOid() == null)
+                    || (vb.getOid().size() < rootOID.size())
+                    || (rootOID.leftMostCompare(rootOID.size(), vb.getOid()) != 0)) {
+                finished = true;
+            } else if (Null.isExceptionSyntax(vb.getVariable().getSyntax())) {
+                System.out.println(vb.toString());
+                finished = true;
+            } else if (vb.getOid().compareTo(lastOID) <= 0) {
+//                log.info(
+//                        "Variable received is not lexicographic successor of requested one:");
+//                log.info(vb.toString() + " <= " + lastOID);
+                finished = true;
+            } else {
+//                log.info(vb.toString()); // 这里显示结果的
+                lastOID = vb.getOid();
+            }
+        }
+        if (response.size() == 0) {
+            finished = true;
+        }
+        if (!finished) {
+            VariableBinding next = response.get(response.size() - 1);
+            next.setVariable(new Null());
+            request.set(0, next);
+            request.setRequestID(new Integer32(0));
+        }
+        return finished;
+    }
+//以下还有 待续...
+//接上面，三部分是一起的，。。。代码 完毕
+
+
+    public void initReceiver(String host) {
+        Address address = new UdpAddress(host + "/" + _port);
+        try {
+            _transport = new DefaultUdpTransportMapping((UdpAddress) address);
+        } catch (Exception ioex) {
+//                log.info("Unable to bind to local IP and port: " + ioex);
+            System.exit(-1);
+        }
+
+        // 使用_numThreads建立一个执行绪集区以便回应送进来的traps讯息
+        _threadPool = ThreadPool.create(this.getClass().getName(), _numThreads);
+
+        // 将一个SNMPv2c讯息处理模型加入MessageDispatcher
+        MessageDispatcher mtDispatcher = new MultiThreadedMessageDispatcher(
+                _threadPool, new MessageDispatcherImpl());
+
+        // add message processing models,加入讯息处理模型
+        mtDispatcher.addMessageProcessingModel(new MPv1());
+        mtDispatcher.addMessageProcessingModel(new MPv2c());
+
+        // add all security protocols,加信所有的安全协定
+        SecurityProtocols.getInstance().addDefaultProtocols();
+
+        _snmp = new Snmp(mtDispatcher, _transport);
+        if (_snmp != null) {
+            _snmp.addCommandResponder(this);
+        } else {
+//                log.info("Unable to create Target object");
+            System.exit(-1);
+        }
+
+        if (_version == SnmpConstants.version3) {
+            mtDispatcher.addMessageProcessingModel(new MPv3());
+
+            MPv3 mpv3 = (MPv3) _snmp
+                    .getMessageProcessingModel(MessageProcessingModel.MPv3);
+
+            // 为了接收找寻请求,我们还会建立一个USM项目以及一个本地引擎识别代号
+            USM usm = new USM(SecurityProtocols.getInstance(), new OctetString(
+                    mpv3.createLocalEngineID()), 0);
+
+            SecurityModels.getInstance().addSecurityModel(usm);
+
+            if (_authoritativeEngineID != null) {
+                _snmp.setLocalEngine(_authoritativeEngineID.getValue(), 0, 0);
+            }
+
+            this.addUsmUser(_snmp);
+        }
+    }
+
+    // 此类别的用户端会呼叫listen()以便开始一个期程
+    public synchronized void listen() {
+        try {
+            _transport.listen();// listen()被呼叫时,会让让程式进入等待状态
+        } catch (Exception ioex) {
+            System.out.println("Unable to listen: " + ioex);
+            System.exit(-1);
+        }
+
+        System.out.println("Waiting for traps..");
+        try {
+            this.wait();// Wait for traps to come
+            // in,等待traps讯息被送进来,//当有讯息被送进来时,processPdu()会被调用
+        } catch (InterruptedException ex) {
+//                log.info("Interrupted while waiting for traps: " + ex);
+            System.exit(-1);
+        }
+    }
+
+    // 当有讯息被送进来时,processPdu()会被调用
+    // 负责处理送进来的请求,因为SnmpWalk支援SNMPv3,所以我们必须能够回应来自权威SNMP引擎的找寻请求
+    public synchronized void processPdu(CommandResponderEvent e) {
+        PDU command = e.getPDU();
+        if (command != null) {
+            this.printVariableBindings(command);
+            //String[] str = command.get(0).getVariable().toString().toUpperCase().split(":");
+//                log.debug("这是==> "+command.toString());
+            if ((command.getType() != PDU.TRAP)
+                    && (command.getType() != PDU.V1TRAP)
+                    && (command.getType() != PDU.REPORT)
+                    && (command.getType() != PDU.RESPONSE)) {
+                command.setErrorIndex(0);
+                command.setErrorStatus(0);
+                command.setType(PDU.RESPONSE);
+                StatusInformation statusInformation = new StatusInformation();
+                StateReference ref = e.getStateReference();
+                try {
+                    e.getMessageDispatcher().returnResponsePdu(
+                            e.getMessageProcessingModel(),
+                            e.getSecurityModel(), e.getSecurityName(),
+                            e.getSecurityLevel(), command,
+                            e.getMaxSizeResponsePDU(), ref, statusInformation);
+                } catch (MessageException ex) {
+//                        log.info("Error while sending response: "
+//                                + ex.getMessage());
+                }
+            }
+        }
+    }
+
+    public String sendAndProcessResponse() {
+        try {
+            PDU response = this.send();
+            if ((getPduType() == PDU.TRAP) || (getPduType() == PDU.REPORT)
+                    || (getPduType() == PDU.V1TRAP)
+                    || (getPduType() == PDU.RESPONSE)) {
+//                    log.info(PDU.getTypeString(getPduType())+ " sent successfully");
+                return PDU.getTypeString(getPduType());
+            } else if (response == null) {
+//                    log.info("Request timed out.");
+                return "Request timed out";
+            } else if (response.getType() == PDU.REPORT) {
+                return printReport(response);
+            } else if (getOperation() == WALK) {
+//                    log.info("End of walked subtree '"
+//                            + ((VariableBinding) getVariableBindings().get(0))
+//                                    .getOid() + "' reached at:");
+                return printVariableBindings(response);
+            } else {
+//                    log.info("Received something strange: requestID="
+//                            + response.getRequestID() + ", errorIndex="
+//                            + response.getErrorIndex() + ", " + "errorStatus="
+//                            + response.getErrorStatusText() + "("
+//                            + response.getErrorStatus() + ")");
+                return printVariableBindings(response);
+            }
+        } catch (Exception ex) {
+//                log.info("Error while trying to send request: "
+//                        + ex.getMessage());
+            ex.printStackTrace();
+            return "s";
+        }
+    }
+
+    private void checkTrapVariables(Vector vbs) {
+        if ((_pduType == PDU.INFORM) || (_pduType == PDU.TRAP)) {
+            if ((vbs.size() == 0)
+                    || ((vbs.size() > 1) && (!((VariableBinding) vbs.get(0))
+                    .getOid().equals(SnmpConstants.sysUpTime)))) {
+                vbs.add(0, new VariableBinding(SnmpConstants.sysUpTime,
+                        _sysUpTime));
+            }
+            if ((vbs.size() == 1)
+                    || ((vbs.size() > 2) && (!((VariableBinding) vbs.get(1))
+                    .getOid().equals(SnmpConstants.snmpTrapOID)))) {
+                vbs.add(1, new VariableBinding(SnmpConstants.snmpTrapOID,
+                        _trapOID));
+            }
+        }
+    }
+}

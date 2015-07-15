@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="snmp4j-2.3.3-javadoc">
+    <CLASSES />
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/Snmp/snmp4j-2.3.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
