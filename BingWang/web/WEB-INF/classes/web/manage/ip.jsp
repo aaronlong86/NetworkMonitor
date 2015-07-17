@@ -59,7 +59,7 @@
         <form name="input" action="/bingwang/manage/ip" method="get">
         <td><c:out value="${ipb.id}"></c:out></td>
         <td><c:out value="${ipb.area}"></c:out></td>
-        <td><c:out value="${ipb.ip}"></c:out></td>
+        <td><a href="http://${ipb.ip}" target="_blank"><c:out value="${ipb.ip}"></c:out></a></td>
         <td>
             <c:choose>
                 <c:when test="${ipb.status=='online'}">
@@ -88,8 +88,8 @@
         </td>
         <td><input type="text" name="manager" size="12" value="${ipb.manager}"></td>
         <td><input type="text" name="brand" size="12" value="${ipb.brand}"></td>
-        <td><input type="text" name="location" value="${ipb.location}"></td>
-        <td><input type="text" name="application" size="45" value="${ipb.application}"></td>
+        <td><input type="text" name="location" size="35" value="${ipb.location}"></td>
+        <td><input type="text" name="application" size="30" value="${ipb.application}"></td>
         <input type="hidden" name="ip" value="${ipb.ip}">
             <input type="hidden" name="flag" value="modify">
         <td><input type="submit" value="修改" /></td>

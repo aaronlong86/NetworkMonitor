@@ -34,6 +34,7 @@ public class IpManageServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        String device = request.getParameter("device");
         String devicetype = request.getParameter("devicetype");
         String manager = request.getParameter("manager");
         String brand = request.getParameter("brand");
@@ -58,8 +59,8 @@ public class IpManageServlet
             ipBeanList = getAllIp();
             ipsegList=getAllIpSegment();}
         else {
-        ipBeanList = getDiscoveryIp(areacode);
-        ipsegList=getIpSegment(areacode);}
+        ipBeanList = getDiscoveryIp(areacode,device);
+        ipsegList=getIpSegment(areacode,device);}
 
 
         ArrayList<DeviceTypeBean> deviceTypeBeans = getDeviceType();
@@ -76,7 +77,7 @@ public class IpManageServlet
         request.getRequestDispatcher("/manage/ip.jsp").forward(request, response);
     }
 
-    private ArrayList<IpBean> getDiscoveryIp(String areacode)
+    private ArrayList<IpBean> getDiscoveryIp(String areacode,String device)
     {
         ArrayList<IpBean> ipBeanList = new ArrayList();
         Mysqldb mdb = new Mysqldb();
@@ -84,7 +85,12 @@ public class IpManageServlet
         {
             String sqlstr = "SELECT t1.ip,t2.area,t1.devicetype,t1.manager,t1.brand,t1.location,t1.application,t1.discoverylasttime from ipdiscovery t1,organization t2 where (t1.areacode like '"
                     + areacode.substring(0, 4) + "%') and (t1.flag=1) and (t1.areacode=t2.areacode)";
-
+            if (device != null){
+                sqlstr = "SELECT t1.ip,t2.area,t1.devicetype,t1.manager,t1.brand,"+
+                        "t1.location,t1.application,t1.discoverylasttime from "+
+                        "ipdiscovery t1,organization t2,devicetype t3 where (t1.flag=1) and (t1.areacode=t2.areacode) and (t3.iddevicetype="
+                        +device+") and (t1.devicetype=t3.devicetype)";
+            }
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;
             while (rs.next())
@@ -173,7 +179,7 @@ public class IpManageServlet
         return ipBeanList;
     }
 
-    private ArrayList<IpSegmentBean> getIpSegment(String areacode)
+    private ArrayList<IpSegmentBean> getIpSegment(String areacode,String device)
     {
         ArrayList<IpSegmentBean> IpSegmentBeanList = new ArrayList();
         Mysqldb mdb = new Mysqldb();
@@ -181,7 +187,9 @@ public class IpManageServlet
         {
             String sqlstr = "SELECT * from ipsegment where (flag=1) and (areacode like '"
                     + areacode.substring(0, 4) + "%') order by ipstart,areacode";
-
+            if (device !=null){
+                return null;
+            }
             ResultSet rs = mdb.sql.executeQuery(sqlstr);
             int i = 1;
             while (rs.next())

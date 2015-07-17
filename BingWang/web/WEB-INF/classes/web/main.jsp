@@ -39,7 +39,7 @@
         <table border="1" align="right">
             <tr>
                 <th>欢迎<%=name %>，您是第<%=visitnum%>个用户！</th>
-                <th>注：本站信息仅供各地辅助管理视频专网，不作为考核依据</th>
+                <th>各地登录账号请与区厅科技信息化处邓明联系，电话：0771-2893683。</th>
             </tr>
             </table>
         </div>
@@ -49,6 +49,7 @@
               <th><a href="/bingwang/main">首页</a></th>
               <th><a href="/bingwang/manage/ipseg" target="_blank">IP段管理</a></th>
               <th><a href="/bingwang/manage/ip" target="_blank">设备管理</a></th>
+              <th><a href="/bingwang/manage/ip?device=7" target="_blank">重点部位</a></th>
               <th><a href="/bingwang/manage/port" target="_blank">设备端口</a></th>
               <th><a href="/bingwang/manage/user" target="_blank">用户管理</a></th>
               <th><a href="http://172.1.2.12:8080/yy-yunwei" target="_blank">专网考核</a></th>
@@ -91,6 +92,7 @@
   </div>
   <div id="footer">本软件为农忠海所开发，如有建议与意见请反馈，谢谢！
     <br>建议使用<a href="/bingwang/360se7.zip">最新版360浏览器（点击下载）</a>的极速模式或IE9.0以上非兼容模式
+    <br><a href="/bingwang/putty_cn.zip">putty_cn（点击下载）</a>
   </div>
 </div>
 </body>
