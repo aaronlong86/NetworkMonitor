@@ -24,6 +24,7 @@ public class SnmpCpu {
      * @param ip
      * @return getvalue
      */
+    @SuppressWarnings("unchecked")
     public List getSNMP_CPU(String ip) {
         List getvalue = new ArrayList();
         try {
@@ -79,8 +80,8 @@ public class SnmpCpu {
         return getvalue;
     }
 
-    public String getCpuLoads(){
-        List list=getSNMP_CPU("192.168.2.128");
+    public String getCpuLoads(String ip){
+        List list=getSNMP_CPU(ip);
         List tempLs = (List)list.get(2);
         float cpuloads=0;
         int j=0;

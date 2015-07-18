@@ -33,7 +33,7 @@
 <body>
 <div id="container">
   <div id="header">
-      <h1>广西公安视频专网管理辅助信息1.3</h1>
+      <h1>广西公安视频专网管理系统1.4</h1>
   </div>
     <div id="menu1" bgcolor="#006400">
         <table border="1" align="right">
@@ -49,7 +49,7 @@
               <th><a href="/bingwang/main">首页</a></th>
               <th><a href="/bingwang/manage/ipseg" target="_blank">IP段管理</a></th>
               <th><a href="/bingwang/manage/ip" target="_blank">设备管理</a></th>
-              <th><a href="/bingwang/manage/ip?device=7" target="_blank">重点部位</a></th>
+              <th><a href="/bingwang/manage/ip?device=13" target="_blank">重点部位</a></th>
               <th><a href="/bingwang/manage/port" target="_blank">设备端口</a></th>
               <th><a href="/bingwang/manage/user" target="_blank">用户管理</a></th>
               <th><a href="http://172.1.2.12:8080/yy-yunwei" target="_blank">专网考核</a></th>

@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.InetAddress;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,40 +19,60 @@ import org.snmp4j.util.TableEvent;
 
 //统计流量的类，取时间与流量
 public class Flow {
-    public void getFlow(String IpAddress) {
-        List list1 = SnmpFunction.getSNMPList(IpAddress, ".1.3.6.1.2.1.2.2.1.10");
-        List list2 = SnmpFunction.getSNMPList(IpAddress, ".1.3.6.1.2.1.2.2.1.16");
-        for (int i = 0; i < list1.size(); i++) {
-            TableEvent te = (TableEvent) list1.get(i);
-            VariableBinding[] vb = te.getColumns();
-            System.out.println(te);
-            if (vb == null) {
-                return;
-            } else {
-                for (int j = 0; j < vb.length; j++) {
-                    System.out.println("端口"+Integer.valueOf(j + 1).toString()+"下载流量:"
-                            +calc(IpAddress, vb[j].getOid().toString()));
-                }
-            }
-        }
+    private enum FlowType {get,send};
+    private String ip="192.168.2.128";
+    public void multiThread(){
 
-        for (int i = 0; i < list2.size(); i++) {
-            TableEvent te = (TableEvent) list2.get(i);
+        for (FlowType flowType:FlowType.values())
+        {
+            new Thread(new GetFlow(ip,flowType)).start();
+        }
+/*
+        GetFlow getFlow1 = new GetFlow(ip,FlowType.get);
+        GetFlow getFlow2 = new GetFlow(ip,FlowType.send);
+        Thread t1 = new Thread(getFlow1);
+        Thread t2 = new Thread(getFlow2);
+        t1.start();
+        t2.start();*/
+    }
+
+    private class GetFlow implements Runnable{
+        String getwalkFlowOid=".1.3.6.1.2.1.2.2.1.10";
+        String sendwalkFlowOid=".1.3.6.1.2.1.2.2.1.16";
+        private String walkFlowOid;
+        private String ipAddress;
+        GetFlow(String ipAddress,FlowType flowType){
+            this.ipAddress=ipAddress;
+            if (flowType==FlowType.get){this.walkFlowOid=getwalkFlowOid;}
+            if (flowType==FlowType.send){this.walkFlowOid=sendwalkFlowOid;}
+        }
+      public void run() {
+        List list = SnmpFunction.getSNMPList(ipAddress,walkFlowOid);
+        for (int i = 0; i < list.size(); i++) {
+            TableEvent te = (TableEvent) list.get(i);
             VariableBinding[] vb = te.getColumns();
-            System.out.println(te);
             if (vb == null) {
                 return;
             } else {
                 for (int j = 0; j < vb.length; j++) {
-                    System.out.println("端口"+Integer.valueOf(j + 1).toString()+"上传流量:"
-                            +calc(IpAddress,vb[j].getOid().toString()));
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String NowTime = sdf.format(c.getTime());// 当前时间
+                    if (walkFlowOid==getwalkFlowOid) {
+                        System.out.println(NowTime + "端口" + Integer.valueOf(i + 1).toString() + "下载网速:"
+                                + vb[j].getOid().toString() + "=" + calc(ipAddress, vb[j].getOid().toString()));
+                    }
+                    if (walkFlowOid==sendwalkFlowOid) {
+                        System.out.println(NowTime + "端口" + Integer.valueOf(i + 1).toString() + "上传网速:"
+                                + vb[j].getOid().toString() + "=" + calc(ipAddress, vb[j].getOid().toString()));
+                    }
                 }
             }
         }
     }
     // 计算端口流量
     @SuppressWarnings("unchecked")
-    private long calc(String IpAddress, String FlowOid) {
+      private long calc(String IpAddress, String FlowOid) {
         long FlowValue = 0;
         try {
             TransportMapping transport = new DefaultUdpTransportMapping();
@@ -106,13 +127,13 @@ public class Flow {
                     flow[i] = Long.parseLong(revBindings.elementAt(1).getVariable().toString());
                 }
                 if (i == 0)
-                    Thread.sleep(3000);// 延时3秒后，第二次取值
+                    Thread.sleep(5000);// 延时5秒后，第二次取值
             }
             snmp.close();
             transport.close();
             // 计算并为时间和最终流量赋值
             Calendar c = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String NowTime = sdf.format(c.getTime());// 当前时间
             long AllSubValue = 0;
             long sub = flow[1] - flow[0];
@@ -127,8 +148,8 @@ public class Flow {
                 AllSubValue += sub;
 
             if (time[1] - time[0] != 0) {
-                // 字节换算成兆比特才是最终流量
-                FlowValue = (long)(AllSubValue / 1024.0 / 1024 * 8 / (time[1] - time[0]));
+                // 字节换算成KB才是最终流量
+                FlowValue = (long)((AllSubValue/1024.0)/ (time[1] - time[0]));
             } else {
                 System.out.println("地址：" + IpAddress + "数据采集失败！");
             }
@@ -137,4 +158,5 @@ public class Flow {
         }
         return FlowValue;
     }
+  }
 }

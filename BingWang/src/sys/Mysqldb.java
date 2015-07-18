@@ -4,7 +4,7 @@ import java.sql.*;
 
 
 public class Mysqldb {
-	private String url="jdbc:mysql://127.0.0.1:3306/test";
+	private String url="jdbc:mysql://127.0.0.1:3306/bingwang";
 	//public String url="jdbc:mysql://45.1.2.202:3306/bingwang?useUnicode=true&characterEncoding=utf8";
 	private String user="root";
 	private String pwd="aaronlong";
